@@ -1,0 +1,1925 @@
+<?php
+require_once __DIR__ . '/includes/db.php';
+$pdo = getDB();
+$offers   = [];
+$drivers  = [];
+$articles = [];
+$offersCount  = 0;
+$driversCount = 0;
+if ($pdo) {
+    try {
+        $offers       = $pdo->query("SELECT * FROM offers WHERE status='active' ORDER BY is_urgent DESC, created_at DESC LIMIT 6")->fetchAll();
+        $drivers      = $pdo->query("SELECT * FROM drivers WHERE status='active' LIMIT 6")->fetchAll();
+        $articles     = $pdo->query("SELECT * FROM articles WHERE status='published' ORDER BY created_at DESC LIMIT 3")->fetchAll();
+        $offersCount  = (int)$pdo->query("SELECT COUNT(*) FROM offers WHERE status='active'")->fetchColumn();
+        $driversCount = (int)$pdo->query("SELECT COUNT(*) FROM drivers WHERE status='active'")->fetchColumn();
+    } catch (Exception $e) {}
+}
+$displayOffers  = $offersCount  > 0 ? $offersCount  : 12;
+$displayDrivers = $driversCount > 0 ? $driversCount : 48;
+$pageTitle = 'FLASH — Plateforme taxi Congo | Offres chauffeur Brazzaville & Pointe-Noire';
+include __DIR__ . '/includes/header.php';
+?>
+
+<style>
+/* ── Reset & base ─────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+/* ── Hero full-bleed ──────────────────────────── */
+.hw-hero {
+    position: relative;
+    width: 100%;
+    height: 420px;
+    overflow: hidden;
+    background: #1a0a05;
+}
+.hw-hero-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+}
+.hw-hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.05) 40%, rgba(0,0,0,0.45) 100%);
+}
+.hw-hero-text {
+    position: absolute;
+    right: 8%;
+    top: 50%;
+    transform: translateY(-50%);
+    max-width: 520px;
+    text-align: right;
+}
+.hw-hero-text h1 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: clamp(28px, 4vw, 54px);
+    font-weight: 400;
+    color: #fff;
+    line-height: 1.15;
+    margin: 0;
+    text-shadow: 0 2px 20px rgba(0,0,0,0.4);
+}
+.hw-hero-text h1 strong {
+    font-weight: 900;
+    display: block;
+}
+.hw-hero-text h1 .hw-count {
+    font-weight: 900;
+}
+
+/* ── Search bar flottante ─────────────────────── */
+.hw-search-wrap {
+    max-width: 900px;
+    margin: -28px auto 0;
+    padding: 0 24px;
+    position: relative;
+    z-index: 10;
+}
+.hw-search-bar {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 40px rgba(0,0,0,0.18);
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    overflow: hidden;
+    border: 1px solid #E5E7EB;
+}
+.hw-search-field {
+    padding: 18px 24px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+.hw-search-field:hover { background: #F9FAFB; }
+.hw-search-field + .hw-search-field {
+    border-left: 1px solid #E5E7EB;
+}
+.hw-search-field label {
+    display: block;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11px;
+    font-weight: 800;
+    color: #111;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+}
+.hw-search-field input,
+.hw-search-field select {
+    width: 100%;
+    border: none;
+    outline: none;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    color: #6B7280;
+    background: transparent;
+    cursor: pointer;
+}
+.hw-search-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #111;
+    width: 72px;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s;
+    flex-shrink: 0;
+}
+.hw-search-btn:hover { background: #333; }
+.hw-search-btn svg { color: #fff; }
+
+/* ── Filter pills ─────────────────────────────── */
+.hw-pills {
+    max-width: 900px;
+    margin: 16px auto 0;
+    padding: 0 24px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+.hw-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 9px 18px;
+    border: 1.5px solid #E5E7EB;
+    border-radius: 50px;
+    background: #fff;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: #111;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.hw-pill:hover {
+    border-color: #111;
+    background: #F9FAFB;
+}
+.hw-pill-icon { font-size: 15px; }
+
+/* ── Banner IA ────────────────────────────────── */
+.hw-banner {
+    max-width: 900px;
+    margin: 16px auto 0;
+    padding: 0 24px;
+}
+.hw-banner-inner {
+    background: #fff;
+    border: 1.5px solid #E5E7EB;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 20px;
+}
+.hw-banner-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #6366F1, #8B5CF6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+    position: relative;
+}
+.hw-banner-avatar::after {
+    content: '✦';
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    font-size: 12px;
+    color: #6366F1;
+    background: #fff;
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.hw-banner-text { flex: 1; }
+.hw-banner-text strong {
+    display: block;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: #6366F1;
+    margin-bottom: 2px;
+}
+.hw-banner-text span {
+    font-size: 13px;
+    color: #6B7280;
+}
+.hw-banner-cta {
+    background: #6366F1;
+    color: #fff;
+    border-radius: 50px;
+    padding: 10px 22px;
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background 0.2s;
+    font-family: 'Montserrat', sans-serif;
+}
+.hw-banner-cta:hover { background: #4F46E5; }
+
+/* ── Section wrapper ──────────────────────────── */
+.hw-section {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 64px 24px;
+}
+.hw-section-sm { padding: 48px 24px; }
+
+/* ── Section title style Hello Work ──────────── */
+.hw-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: clamp(26px, 3.5vw, 42px);
+    font-weight: 400;
+    color: #111;
+    line-height: 1.15;
+    margin: 0 0 36px;
+}
+.hw-title strong { font-weight: 900; display: block; }
+
+/* ── Carousel des propriétaires ──────────────── */
+.hw-carousel-wrap { position: relative; }
+.hw-carousel {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    overflow: hidden;
+}
+.hw-owner-card {
+    border-radius: 18px;
+    overflow: hidden;
+    border: 1px solid #E5E7EB;
+    background: #fff;
+    cursor: pointer;
+    text-decoration: none;
+    display: block;
+    transition: box-shadow 0.2s, transform 0.2s;
+}
+.hw-owner-card:hover {
+    box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+    transform: translateY(-2px);
+}
+.hw-owner-photo {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    display: block;
+    background: #F3F4F6;
+}
+.hw-owner-photo-placeholder {
+    width: 100%;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 70px;
+}
+.hw-owner-info {
+    padding: 16px 20px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.hw-owner-info-left {}
+.hw-owner-logo {
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    background: #F9FAFB;
+    border: 1px solid #E5E7EB;
+}
+.hw-owner-name {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: #111;
+    margin-bottom: 4px;
+}
+.hw-owner-count {
+    font-size: 14px;
+    color: #6B7280;
+}
+.hw-owner-arrow {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: #111;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: background 0.2s;
+}
+.hw-owner-card:hover .hw-owner-arrow { background: #0070FF; }
+.hw-owner-arrow svg { color: #fff; }
+
+/* ── Carousel nav ─────────────────────────────── */
+.hw-carousel-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 28px;
+}
+.hw-carousel-dots {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+.hw-dot {
+    width: 32px;
+    height: 6px;
+    border-radius: 3px;
+    background: #111;
+    transition: background 0.2s;
+    cursor: pointer;
+}
+.hw-dot.inactive {
+    background: #E5E7EB;
+    width: 6px;
+}
+.hw-carousel-arrows {
+    display: flex;
+    gap: 8px;
+}
+.hw-arrow-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1.5px solid #E5E7EB;
+    background: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    color: #111;
+}
+.hw-arrow-btn:hover {
+    border-color: #111;
+    background: #F9FAFB;
+}
+
+/* ── Btn Noir pill "Voir toutes" ──────────────── */
+.hw-btn-black {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #111;
+    color: #fff;
+    border-radius: 50px;
+    padding: 14px 28px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: background 0.2s;
+    margin-top: 24px;
+}
+.hw-btn-black:hover { background: #333; }
+
+/* ── Feature 2-col ────────────────────────────── */
+.hw-feature-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    align-items: start;
+}
+.hw-feature-big {
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+    min-height: 420px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    text-decoration: none;
+    transition: transform 0.3s;
+}
+.hw-feature-big:hover { transform: scale(1.01); }
+.hw-feature-big-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.hw-feature-big-placeholder {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 100px;
+    opacity: 0.25;
+}
+.hw-feature-big-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.1) 60%);
+}
+.hw-feature-big-content {
+    position: relative;
+    z-index: 2;
+    padding: 32px;
+}
+.hw-feature-big-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.2);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: #fff;
+    border-radius: 50px;
+    padding: 5px 14px;
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    font-family: 'Montserrat', sans-serif;
+}
+.hw-feature-big-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.3;
+    margin-bottom: 16px;
+}
+.hw-feature-big-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #fff;
+    color: #111;
+    border-radius: 50px;
+    padding: 11px 22px;
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+    font-family: 'Montserrat', sans-serif;
+    transition: background 0.2s;
+}
+.hw-feature-big-cta:hover { background: #F3F4F6; }
+
+.hw-feature-stack { display: flex; flex-direction: column; gap: 16px; }
+.hw-feature-card {
+    border-radius: 18px;
+    overflow: hidden;
+    position: relative;
+    height: 128px;
+    text-decoration: none;
+    display: flex;
+    align-items: flex-end;
+    transition: transform 0.25s;
+}
+.hw-feature-card:hover { transform: translateY(-3px); }
+.hw-feature-card-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.hw-feature-card-placeholder {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 20px;
+    font-size: 50px;
+    opacity: 0.3;
+}
+.hw-feature-card-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.1) 70%);
+}
+.hw-feature-card-content {
+    position: relative;
+    z-index: 2;
+    padding: 20px 24px;
+}
+.hw-feature-card-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 15px;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 4px;
+}
+.hw-feature-card-sub {
+    font-size: 12px;
+    color: rgba(255,255,255,0.8);
+}
+.hw-feature-card-arrow {
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+    z-index: 2;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+    border: 1px solid rgba(255,255,255,0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.hw-feature-card-arrow svg { color: #fff; }
+
+/* ── Stats 2 grandes cartes ───────────────────── */
+.hw-stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+.hw-stat-card {
+    border-radius: 22px;
+    padding: 40px 44px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 240px;
+    position: relative;
+    overflow: hidden;
+}
+.hw-stat-card::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.08);
+}
+.hw-stat-num {
+    font-family: 'Montserrat', sans-serif;
+    font-size: clamp(48px, 6vw, 76px);
+    font-weight: 900;
+    color: #fff;
+    line-height: 1;
+    margin-bottom: 8px;
+}
+.hw-stat-label {
+    font-size: 15px;
+    color: rgba(255,255,255,0.8);
+    line-height: 1.5;
+}
+.hw-stat-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 1.5px solid rgba(255,255,255,0.5);
+    color: #fff;
+    border-radius: 50px;
+    padding: 10px 22px;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+    font-family: 'Montserrat', sans-serif;
+    width: fit-content;
+    transition: all 0.2s;
+}
+.hw-stat-btn:hover { background: rgba(255,255,255,0.15); border-color: #fff; }
+
+/* ── App section ──────────────────────────────── */
+.hw-app-card {
+    border-radius: 22px;
+    background: linear-gradient(110deg, #0d1b3e 0%, #0a2255 100%);
+    padding: 48px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 40px;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
+}
+.hw-app-card::before {
+    content: '';
+    position: absolute;
+    right: -60px; bottom: -60px;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    background: rgba(0,112,255,0.15);
+}
+.hw-app-eyebrow {
+    font-size: 11px;
+    font-weight: 700;
+    color: #FFC400;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 10px;
+    font-family: 'Montserrat', sans-serif;
+}
+.hw-app-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: clamp(20px, 2.5vw, 28px);
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.2;
+    margin-bottom: 12px;
+}
+.hw-app-sub {
+    font-size: 14px;
+    color: rgba(255,255,255,0.7);
+    line-height: 1.6;
+    margin-bottom: 24px;
+}
+.hw-app-btns { display: flex; gap: 12px; flex-wrap: wrap; }
+.hw-app-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #fff;
+    border-radius: 12px;
+    padding: 10px 18px;
+    text-decoration: none;
+    transition: background 0.2s;
+}
+.hw-app-btn:hover { background: #F3F4F6; }
+.hw-app-btn-icon { font-size: 22px; }
+.hw-app-btn-label span { display: block; }
+.hw-app-btn-label span:first-child { font-size: 10px; color: #6B7280; font-weight: 500; }
+.hw-app-btn-label span:last-child  { font-size: 14px; color: #111; font-weight: 700; font-family: 'Montserrat',sans-serif; }
+.hw-phones {
+    display: flex;
+    position: relative;
+    z-index: 2;
+    gap: 0;
+}
+.hw-phone {
+    width: 110px;
+    background: #1a1a2e;
+    border-radius: 22px;
+    padding: 6px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    border: 1.5px solid rgba(255,255,255,0.1);
+}
+.hw-phone-screen {
+    border-radius: 16px;
+    height: 190px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+}
+.hw-phone:last-child {
+    transform: translateX(-16px) translateY(20px);
+}
+
+/* ── Articles section ─────────────────────────── */
+.hw-articles-section {
+    background: #FAF6F0;
+    padding: 64px 0;
+}
+.hw-articles-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+.hw-articles-eyebrow {
+    font-size: 12px;
+    font-weight: 700;
+    color: #9CA3AF;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 20px;
+}
+.hw-see-all {
+    font-size: 14px;
+    font-weight: 600;
+    color: #111;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: color 0.2s;
+}
+.hw-see-all:hover { color: #0070FF; }
+.hw-articles-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 36px;
+}
+.hw-article-card {
+    background: #fff;
+    border-radius: 16px;
+    overflow: hidden;
+    text-decoration: none;
+    display: block;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    transition: all 0.2s;
+}
+.hw-article-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 28px rgba(0,0,0,0.12);
+}
+.hw-article-thumb {
+    height: 160px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 60px;
+}
+.hw-article-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 50px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    font-family: 'Montserrat', sans-serif;
+}
+.hw-article-body { padding: 18px 20px; }
+.hw-article-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: #111;
+    margin-bottom: 8px;
+    line-height: 1.35;
+}
+.hw-article-excerpt { font-size: 13px; color: #6B7280; margin-bottom: 14px; line-height: 1.5; }
+.hw-article-meta { font-size: 12px; color: #9CA3AF; }
+
+/* ── Tags populaires ──────────────────────────── */
+.hw-tags-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: #6B7280;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 14px;
+}
+.hw-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+.hw-tag {
+    display: inline-block;
+    padding: 7px 18px;
+    background: #fff;
+    border-radius: 50px;
+    font-size: 13px;
+    color: #374151;
+    text-decoration: none;
+    border: 1px solid #E5E7EB;
+    transition: all 0.2s;
+}
+.hw-tag:hover { border-color: #111; color: #111; background: #F9FAFB; }
+
+/* ── Outils ───────────────────────────────────── */
+.hw-tools-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+}
+.hw-tool-card {
+    border-radius: 20px;
+    padding: 40px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 24px;
+    align-items: end;
+    overflow: hidden;
+    position: relative;
+    min-height: 220px;
+}
+.hw-tool-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 20px;
+    font-weight: 800;
+    color: #111;
+    margin-bottom: 10px;
+    line-height: 1.3;
+}
+.hw-tool-sub {
+    font-size: 13px;
+    color: #6B7280;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+.hw-tool-btn {
+    display: inline-block;
+    background: #111;
+    color: #fff;
+    border-radius: 50px;
+    padding: 10px 22px;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+    font-family: 'Montserrat', sans-serif;
+    transition: background 0.2s;
+}
+.hw-tool-btn:hover { background: #333; }
+.hw-tool-icon { font-size: 80px; line-height: 1; flex-shrink: 0; }
+
+/* ── Catégories ───────────────────────────────── */
+.hw-cats-section { background: #F9FAFB; border-top: 1px solid #E5E7EB; padding: 64px 0; }
+.hw-cats-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 36px;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+.hw-cats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 28px;
+}
+.hw-cat-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    font-weight: 800;
+    color: #111;
+    margin-bottom: 14px;
+}
+.hw-cat-pills { display: flex; flex-direction: column; gap: 8px; }
+.hw-cat-pill {
+    display: inline-block;
+    border-radius: 50px;
+    padding: 5px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    width: fit-content;
+    border: 1px solid transparent;
+    transition: all 0.2s;
+}
+.hw-cats-center { text-align: center; margin-top: 36px; }
+.hw-btn-outline {
+    display: inline-block;
+    border: 1.5px solid #E5E7EB;
+    border-radius: 50px;
+    padding: 12px 32px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #111;
+    text-decoration: none;
+    background: #fff;
+    transition: all 0.2s;
+    font-family: 'Montserrat', sans-serif;
+}
+.hw-btn-outline:hover { border-color: #111; }
+
+/* ── Panoramas ────────────────────────────────── */
+.hw-panos-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+.hw-pano-card {
+    border-radius: 18px;
+    overflow: hidden;
+    position: relative;
+    height: 170px;
+    display: block;
+    text-decoration: none;
+    transition: transform 0.3s;
+}
+.hw-pano-card:hover { transform: scale(1.02); }
+.hw-pano-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0) 60%);
+}
+.hw-pano-emoji {
+    position: absolute;
+    top: 18px;
+    left: 20px;
+    font-size: 32px;
+}
+.hw-pano-body {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 18px 20px;
+    z-index: 2;
+}
+.hw-pano-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 16px;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 4px;
+    line-height: 1.3;
+}
+.hw-pano-sub { font-size: 12px; color: rgba(255,255,255,0.75); }
+
+/* ── Villes ───────────────────────────────────── */
+.hw-cities-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 16px;
+}
+.hw-city-card {
+    border-radius: 18px;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    text-decoration: none;
+    transition: transform 0.3s;
+}
+.hw-city-card:hover { transform: scale(1.01); }
+.hw-city-card.big { grid-row: 1 / 3; min-height: 300px; }
+.hw-city-card.small { min-height: 138px; }
+.hw-city-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.1) 60%);
+}
+.hw-city-emoji {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 80px;
+    opacity: 0.18;
+}
+.hw-city-emoji.sm { font-size: 50px; }
+.hw-city-body {
+    position: relative;
+    z-index: 2;
+    padding: 22px;
+    width: 100%;
+}
+.hw-city-name {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 900;
+    color: #fff;
+    line-height: 1;
+    margin-bottom: 4px;
+}
+.hw-city-name.lg { font-size: 30px; }
+.hw-city-name.sm { font-size: 18px; }
+.hw-city-sub { font-size: 13px; color: rgba(255,255,255,0.8); }
+
+/* ── SEO links ────────────────────────────────── */
+.hw-seo-section { border-top: 1px solid #E5E7EB; padding: 48px 0; }
+.hw-seo-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 32px;
+}
+.hw-seo-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #9CA3AF;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 12px;
+}
+.hw-seo-link {
+    display: block;
+    font-size: 13px;
+    color: #6B7280;
+    text-decoration: none;
+    margin-bottom: 7px;
+    transition: color 0.2s;
+}
+.hw-seo-link:hover { color: #111; }
+
+/* ── Témoignages ──────────────────────────────── */
+.hw-testi-section { background: #F9FAFB; padding: 64px 0; border-top: 1px solid #E5E7EB; }
+.hw-testi-header { text-align: center; margin-bottom: 40px; }
+.hw-testi-eyebrow {
+    font-size: 12px;
+    font-weight: 700;
+    color: #0070FF;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+    font-family: 'Montserrat', sans-serif;
+}
+.hw-testi-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: clamp(22px, 3vw, 32px);
+    font-weight: 800;
+    color: #111;
+}
+.hw-testi-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+.hw-testi-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 28px;
+    border: 1px solid #E5E7EB;
+    position: relative;
+    overflow: hidden;
+}
+.hw-testi-quote {
+    font-size: 64px;
+    color: #F3F4F6;
+    position: absolute;
+    top: 8px;
+    left: 16px;
+    line-height: 1;
+    font-family: Georgia, serif;
+}
+.hw-testi-stars { color: #FFC400; font-size: 14px; margin-bottom: 12px; position: relative; z-index: 1; }
+.hw-testi-text {
+    font-size: 14px;
+    color: #374151;
+    line-height: 1.65;
+    margin-bottom: 20px;
+    position: relative;
+    z-index: 1;
+    font-style: italic;
+}
+.hw-testi-author { display: flex; align-items: center; gap: 12px; }
+.hw-testi-avatar {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; font-weight: 800; color: #fff; flex-shrink: 0;
+}
+.hw-testi-name { font-size: 13px; font-weight: 700; color: #111; }
+.hw-testi-role { font-size: 12px; color: #9CA3AF; }
+
+/* ── CTA Final ────────────────────────────────── */
+.hw-cta-section { padding: 64px 0; }
+.hw-cta-card {
+    background: linear-gradient(135deg, #0070FF 0%, #0044CC 100%);
+    border-radius: 24px;
+    padding: 64px 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+.hw-cta-card::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.07);
+}
+.hw-cta-card::after {
+    content: '';
+    position: absolute;
+    bottom: -40px; left: -40px;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.05);
+}
+.hw-cta-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: clamp(24px, 4vw, 42px);
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 12px;
+    line-height: 1.2;
+    position: relative;
+    z-index: 2;
+}
+.hw-cta-sub {
+    font-size: 16px;
+    color: rgba(255,255,255,0.8);
+    margin-bottom: 36px;
+    position: relative;
+    z-index: 2;
+}
+.hw-cta-btns {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 2;
+}
+.hw-cta-btn-white {
+    display: inline-block;
+    background: #fff;
+    color: #0070FF;
+    border-radius: 50px;
+    padding: 14px 36px;
+    font-size: 15px;
+    font-weight: 700;
+    text-decoration: none;
+    font-family: 'Montserrat', sans-serif;
+    transition: background 0.2s;
+}
+.hw-cta-btn-white:hover { background: #F0F9FF; }
+.hw-cta-btn-yellow {
+    display: inline-block;
+    background: #FFC400;
+    color: #111;
+    border-radius: 50px;
+    padding: 14px 36px;
+    font-size: 15px;
+    font-weight: 700;
+    text-decoration: none;
+    font-family: 'Montserrat', sans-serif;
+    transition: background 0.2s;
+}
+.hw-cta-btn-yellow:hover { background: #e6b000; }
+
+/* ── WhatsApp float ───────────────────────────── */
+.wha-float {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    z-index: 999;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: #25D366;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 20px rgba(37,211,102,0.45);
+    text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.wha-float:hover { transform: scale(1.1); box-shadow: 0 6px 28px rgba(37,211,102,0.55); }
+
+/* ── Séparateur horizontal ────────────────────── */
+.hw-divider { border: none; border-top: 1px solid #E5E7EB; margin: 0; }
+
+/* ── Responsive ───────────────────────────────── */
+@media (max-width: 1023px) {
+    .hw-carousel { grid-template-columns: repeat(2, 1fr); }
+    .hw-feature-grid { grid-template-columns: 1fr; }
+    .hw-feature-big { min-height: 320px; }
+    .hw-stats-grid { grid-template-columns: 1fr; }
+    .hw-app-card { grid-template-columns: 1fr; }
+    .hw-phones { display: none; }
+    .hw-articles-grid { grid-template-columns: repeat(2, 1fr); }
+    .hw-tools-grid { grid-template-columns: 1fr; }
+    .hw-cats-grid { grid-template-columns: repeat(2, 1fr); }
+    .hw-panos-grid { grid-template-columns: 1fr; }
+    .hw-cities-grid { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
+    .hw-city-card.big { grid-row: auto; min-height: 160px; }
+    .hw-seo-grid { grid-template-columns: repeat(2, 1fr); }
+    .hw-testi-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 767px) {
+    .hw-hero { height: 320px; }
+    .hw-hero-text { right: 5%; left: 5%; text-align: left; }
+    .hw-search-bar { grid-template-columns: 1fr auto; }
+    .hw-search-field:last-of-type { display: none; }
+    .hw-carousel { grid-template-columns: 1fr; }
+    .hw-feature-stack { display: none; }
+    .hw-articles-grid { grid-template-columns: 1fr; }
+    .hw-cats-grid { grid-template-columns: 1fr 1fr; }
+    .hw-panos-grid { grid-template-columns: 1fr; }
+    .hw-cities-grid { grid-template-columns: 1fr; }
+    .hw-seo-grid { grid-template-columns: 1fr 1fr; }
+    .hw-testi-grid { grid-template-columns: 1fr; }
+    .hw-cta-card { padding: 40px 24px; }
+    .hw-app-card { padding: 32px 24px; }
+    .hw-stat-card { padding: 28px; }
+}
+</style>
+
+<!-- ══════════════════════════════════════════════════════
+     HERO — Image full-bleed + texte overlay droite
+     Exactement comme Hello Work
+═══════════════════════════════════════════════════════ -->
+<section class="hw-hero">
+    <!-- Image pleine largeur -->
+    <img src="/assets/images/taxi-hero.jpg"
+         alt="Propriétaire de taxi remet les clés à son chauffeur à Brazzaville"
+         class="hw-hero-img">
+    <!-- Overlay dégradé pour lisibilité -->
+    <div class="hw-hero-overlay"></div>
+    <!-- Texte overlay côté droit -->
+    <div class="hw-hero-text">
+        <h1>
+            Notre job, vous aider<br>
+            à trouver le vôtre parmi<br>
+            <strong>
+                <span data-target="<?= $displayOffers ?>"><?= number_format($displayOffers,0,',',' ') ?></span> offres
+            </strong>
+        </h1>
+    </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════
+     SEARCH BAR flottante — sous l'image, centrée
+     Style Hello Work : 2 champs + bouton rond noir
+═══════════════════════════════════════════════════════ -->
+<div class="hw-search-wrap">
+    <form action="/offres" method="GET" class="hw-search-bar">
+        <div class="hw-search-field">
+            <label for="s-quoi">QUOI ?</label>
+            <input type="text" id="s-quoi" name="q" placeholder="Chauffeur, type de taxi, recette…">
+        </div>
+        <div class="hw-search-field">
+            <label for="s-ou">OÙ ?</label>
+            <select id="s-ou" name="ville">
+                <option value="">Ville, quartier, zone…</option>
+                <option>Brazzaville</option>
+                <option>Pointe-Noire</option>
+                <option>Dolisie</option>
+                <option>Nkayi</option>
+            </select>
+        </div>
+        <button type="submit" class="hw-search-btn" aria-label="Rechercher">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        </button>
+    </form>
+</div>
+
+<!-- Pills de filtres rapides -->
+<div class="hw-pills">
+    <a href="/offres?type=temps-plein" class="hw-pill">
+        <span class="hw-pill-icon">🌞</span> Temps plein
+    </a>
+    <a href="/offres?type=temps-partiel" class="hw-pill">
+        <span class="hw-pill-icon">🕐</span> Temps partiel
+    </a>
+    <a href="/offres?type=climatise" class="hw-pill">
+        <span class="hw-pill-icon">❄️</span> Taxi climatisé
+    </a>
+    <a href="/offres?urgence=1" class="hw-pill">
+        <span class="hw-pill-icon">⚡</span> Urgent
+    </a>
+</div>
+
+<!-- Banner FLASH IA (équivalent Coach Emploi) -->
+<div class="hw-banner" style="margin-bottom: 20px;">
+    <div class="hw-banner-inner">
+        <div class="hw-banner-avatar">🚖</div>
+        <div class="hw-banner-text">
+            <strong>Découvrez FLASH Accompagnement</strong>
+            <span>Notre équipe vous accompagne à chaque étape de votre recherche d'emploi taxi au Congo</span>
+        </div>
+        <a href="/contact" class="hw-banner-cta">Découvrir</a>
+    </div>
+</div>
+
+<hr class="hw-divider">
+
+<!-- ══════════════════════════════════════════════════════
+     DES PROPRIÉTAIRES QUI RECRUTENT — Carousel cards
+     Exactement comme "Des entreprises qui recrutent"
+═══════════════════════════════════════════════════════ -->
+<div class="hw-section" style="padding-bottom:0;">
+    <h2 class="hw-title">Des propriétaires<br><strong>qui recrutent</strong></h2>
+
+    <div class="hw-carousel-wrap">
+        <div class="hw-carousel" id="ownersCarousel">
+            <?php
+            $ownerCards = [
+                [
+                    'emoji'  => '🚖',
+                    'bg'     => 'linear-gradient(135deg,#0d2d6b,#1e4db7)',
+                    'name'   => 'M. Moukassa – Brazzaville',
+                    'jobs'   => '3 offres actives',
+                    'photo_bg'=> '#EEF2FF',
+                    'photo_emoji'=> '🌆',
+                ],
+                [
+                    'emoji'  => '🚕',
+                    'bg'     => 'linear-gradient(135deg,#064e3b,#008A3D)',
+                    'name'   => 'Mme Bouanga – Pointe-Noire',
+                    'jobs'   => '2 offres actives',
+                    'photo_bg'=> '#F0FDF4',
+                    'photo_emoji'=> '🌊',
+                ],
+                [
+                    'emoji'  => '🚗',
+                    'bg'     => 'linear-gradient(135deg,#7f1d1d,#c0392b)',
+                    'name'   => 'M. Nganga – Dolisie',
+                    'jobs'   => '1 offre active',
+                    'photo_bg'=> '#FFF7ED',
+                    'photo_emoji'=> '🌿',
+                ],
+                [
+                    'emoji'  => '❄️',
+                    'bg'     => 'linear-gradient(135deg,#1e3a8a,#3b82f6)',
+                    'name'   => 'Taxi Élite – Brazzaville',
+                    'jobs'   => '4 offres actives',
+                    'photo_bg'=> '#EFF6FF',
+                    'photo_emoji'=> '🏙️',
+                ],
+                [
+                    'emoji'  => '⚡',
+                    'bg'     => 'linear-gradient(135deg,#713f12,#d97706)',
+                    'name'   => 'Rapid Auto – Nkayi',
+                    'jobs'   => '2 offres actives',
+                    'photo_bg'=> '#FEFCE8',
+                    'photo_emoji'=> '🏘️',
+                ],
+                [
+                    'emoji'  => '🌟',
+                    'bg'     => 'linear-gradient(135deg,#4c1d95,#7c3aed)',
+                    'name'   => 'Congo Taxi Pro – PNR',
+                    'jobs'   => '5 offres actives',
+                    'photo_bg'=> '#FDF4FF',
+                    'photo_emoji'=> '🌴',
+                ],
+            ];
+            foreach (array_slice($ownerCards, 0, 3) as $o): ?>
+            <a href="/offres?proprietaire=<?= urlencode($o['name']) ?>" class="hw-owner-card">
+                <!-- Photo du propriétaire -->
+                <div class="hw-owner-photo-placeholder" style="background:<?= $o['photo_bg'] ?>;">
+                    <span style="font-size:80px;opacity:0.35;"><?= $o['photo_emoji'] ?></span>
+                    <!-- Logo badge overlay -->
+                    <div style="position:absolute;bottom:12px;left:12px;
+                        background:<?= $o['bg'] ?>;color:#fff;
+                        border-radius:10px;padding:6px 12px;
+                        font-size:13px;font-weight:700;
+                        font-family:'Montserrat',sans-serif;
+                        display:flex;align-items:center;gap:6px;">
+                        <?= $o['emoji'] ?>
+                    </div>
+                </div>
+                <div class="hw-owner-info">
+                    <div class="hw-owner-info-left">
+                        <div class="hw-owner-name"><?= htmlspecialchars($o['name']) ?></div>
+                        <div class="hw-owner-count"><?= $o['jobs'] ?></div>
+                    </div>
+                    <div class="hw-owner-arrow">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </div>
+                </div>
+            </a>
+            <?php endforeach; ?>
+        </div>
+
+        <!-- Navigation carousel -->
+        <div class="hw-carousel-nav">
+            <div style="display:flex;align-items:center;gap:20px;">
+                <!-- Flèches gauche/droite -->
+                <div class="hw-carousel-arrows">
+                    <button class="hw-arrow-btn" onclick="slideOwners(-1)" aria-label="Précédent">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                    </button>
+                    <button class="hw-arrow-btn" onclick="slideOwners(1)" aria-label="Suivant">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </button>
+                </div>
+                <!-- Dots -->
+                <div class="hw-carousel-dots">
+                    <div class="hw-dot" id="dot0"></div>
+                    <div class="hw-dot inactive" id="dot1"></div>
+                </div>
+            </div>
+            <div></div>
+        </div>
+    </div>
+
+    <a href="/offres" class="hw-btn-black">
+        Voir toutes les offres
+    </a>
+</div>
+
+<hr class="hw-divider" style="margin-top:64px;">
+
+<!-- ══════════════════════════════════════════════════════
+     TROUVER UN CHAUFFEUR — 2 colonnes style Hello Work
+     Grande card photo gauche + 3 mini cards droite
+═══════════════════════════════════════════════════════ -->
+<div class="hw-section">
+    <h2 class="hw-title">Trouver un chauffeur ?<br><strong>Simple comme FLASH</strong></h2>
+
+    <div class="hw-feature-grid">
+
+        <!-- Grande card gauche avec photo -->
+        <a href="/chauffeurs" class="hw-feature-big" style="background:linear-gradient(135deg,#6366F1 0%,#3730A3 100%);">
+            <div class="hw-feature-big-placeholder">🚗</div>
+            <div class="hw-feature-big-overlay"></div>
+            <div class="hw-feature-big-content">
+                <span class="hw-feature-big-badge">⚡ Pour les chauffeurs</span>
+                <div class="hw-feature-big-title">
+                    Déposez votre profil<br>chauffeur en 5 minutes
+                </div>
+                <a href="/chauffeurs" class="hw-feature-big-cta">
+                    Je dépose mon CV
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
+            </div>
+        </a>
+
+        <!-- 3 petites cards droite -->
+        <div class="hw-feature-stack">
+
+            <!-- Card 1 — Vert -->
+            <a href="/offres" class="hw-feature-card" style="background:linear-gradient(135deg,#14532d,#008A3D);">
+                <div class="hw-feature-card-placeholder">✅</div>
+                <div class="hw-feature-card-overlay"></div>
+                <div class="hw-feature-card-content">
+                    <div class="hw-feature-card-title">Suivez votre candidature</div>
+                    <div class="hw-feature-card-sub">Contacté directement, sans intermédiaire</div>
+                </div>
+                <div class="hw-feature-card-arrow">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </div>
+            </a>
+
+            <!-- Card 2 — Orange -->
+            <a href="/offres" class="hw-feature-card" style="background:linear-gradient(135deg,#7c2d12,#ea580c);">
+                <div class="hw-feature-card-placeholder">📋</div>
+                <div class="hw-feature-card-overlay"></div>
+                <div class="hw-feature-card-content">
+                    <div class="hw-feature-card-title">Des offres qui ne cachent rien</div>
+                    <div class="hw-feature-card-sub">Recette, horaires, type de taxi — tout affiché</div>
+                </div>
+                <div class="hw-feature-card-arrow">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </div>
+            </a>
+
+            <!-- Card 3 — Bleu -->
+            <a href="/proprietaires" class="hw-feature-card" style="background:linear-gradient(135deg,#1e3a8a,#2563eb);">
+                <div class="hw-feature-card-placeholder">🤝</div>
+                <div class="hw-feature-card-overlay"></div>
+                <div class="hw-feature-card-content">
+                    <div class="hw-feature-card-title">Des propriétaires transparents</div>
+                    <div class="hw-feature-card-sub">Sélectionnés par FLASH pour leur sérieux</div>
+                </div>
+                <div class="hw-feature-card-arrow">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+
+<hr class="hw-divider">
+
+<!-- ══════════════════════════════════════════════════════
+     STATS — "Préparez-vous à décrocher votre job !"
+═══════════════════════════════════════════════════════ -->
+<div class="hw-section" style="padding-bottom:0;">
+    <h2 class="hw-title">Préparez-vous à<br><strong>décrocher votre job !</strong></h2>
+
+    <div class="hw-stats-grid">
+        <!-- Stat 1 — Bleu -->
+        <div class="hw-stat-card" style="background:#0070FF;">
+            <div>
+                <div class="hw-stat-num">
+                    <span data-target="<?= $displayDrivers ?>"><?= $displayDrivers ?></span>
+                </div>
+                <div class="hw-stat-label">Chauffeurs inscrits<br>sur FLASH Congo</div>
+            </div>
+            <a href="/chauffeurs" class="hw-stat-btn">
+                Déposer mon CV
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+        </div>
+        <!-- Stat 2 — Noir -->
+        <div class="hw-stat-card" style="background:#111111;">
+            <div>
+                <div class="hw-stat-num">
+                    <span data-target="<?= $displayOffers ?>"><?= $displayOffers ?></span>
+                </div>
+                <div class="hw-stat-label">Offres actives<br>sur la plateforme</div>
+            </div>
+            <a href="/offres" class="hw-stat-btn">
+                Voir les offres
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- App section -->
+<div style="max-width:1200px;margin:20px auto 64px;padding:0 24px;">
+    <div class="hw-app-card">
+        <div style="position:relative;z-index:2;">
+            <p class="hw-app-eyebrow">Application mobile</p>
+            <h3 class="hw-app-title">Téléchargez l'app FLASH<br>pour ne rien manquer</h3>
+            <p class="hw-app-sub">Recevez les offres en temps réel, gérez votre profil et contactez propriétaires ou chauffeurs depuis votre téléphone.</p>
+            <div class="hw-app-btns">
+                <a href="#" class="hw-app-btn">
+                    <span class="hw-app-btn-icon">🍎</span>
+                    <div class="hw-app-btn-label">
+                        <span>Disponible sur</span>
+                        <span>App Store</span>
+                    </div>
+                </a>
+                <a href="#" class="hw-app-btn">
+                    <span class="hw-app-btn-icon">🤖</span>
+                    <div class="hw-app-btn-label">
+                        <span>Disponible sur</span>
+                        <span>Google Play</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="hw-phones" style="position:relative;z-index:2;">
+            <div class="hw-phone">
+                <div class="hw-phone-screen" style="background:linear-gradient(180deg,#0070FF,#005ACC);">⚡</div>
+            </div>
+            <div class="hw-phone">
+                <div class="hw-phone-screen" style="background:linear-gradient(180deg,#008A3D,#006B2E);">🚖</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<hr class="hw-divider">
+
+<!-- ══════════════════════════════════════════════════════
+     ARTICLES — Fond beige crème, style Hello Work
+═══════════════════════════════════════════════════════ -->
+<section class="hw-articles-section">
+    <div class="hw-section hw-section-sm" style="padding-top:64px;">
+        <div class="hw-articles-header">
+            <h2 class="hw-title" style="margin-bottom:0;">Tout connaître<br><strong>du monde du taxi au Congo</strong></h2>
+            <a href="/conseils" class="hw-see-all">
+                Voir tous les articles
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+        </div>
+        <p class="hw-articles-eyebrow" style="margin-top:8px;">Nos articles fraîchement sortis</p>
+
+        <?php
+        $staticArts = [
+            ['comment-rentabiliser-son-taxi-au-congo','Comment rentabiliser son taxi au Congo','Gestion',5,'Découvrez les meilleures stratégies pour maximiser vos revenus de chauffeur.','#EEF2FF','#4F46E5','🚗'],
+            ['comment-choisir-un-bon-chauffeur','Comment choisir un bon chauffeur de taxi','Recrutement',4,'Les critères essentiels pour sélectionner un chauffeur fiable et sérieux.','#F0FDF4','#16A34A','👤'],
+            ['comment-fixer-la-recette-journaliere','Comment fixer la recette journalière','Finance',3,'Guide pratique pour établir une recette juste entre propriétaire et chauffeur.','#FFF7ED','#EA580C','💰'],
+        ];
+        $displayArts = !empty($articles) ? $articles : null;
+        $emojis = ['🚗','👤','💰'];
+        $bgs    = ['#EEF2FF','#F0FDF4','#FFF7ED'];
+        $colors = ['#4F46E5','#16A34A','#EA580C'];
+        $idx = 0;
+        ?>
+
+        <div class="hw-articles-grid">
+            <?php if ($displayArts): foreach (array_slice($displayArts,0,3) as $a): ?>
+            <a href="/conseils/<?= htmlspecialchars($a['slug']) ?>" class="hw-article-card">
+                <div class="hw-article-thumb" style="background:<?= $bgs[$idx%3] ?>;">
+                    <?= $emojis[$idx%3] ?>
+                    <span class="hw-article-badge" style="background:<?= $colors[$idx%3] ?>;"><?= htmlspecialchars($a['category']) ?></span>
+                </div>
+                <div class="hw-article-body">
+                    <div class="hw-article-title"><?= htmlspecialchars($a['title']) ?></div>
+                    <div class="hw-article-excerpt"><?= htmlspecialchars(substr($a['excerpt'],0,90)) ?>…</div>
+                    <div class="hw-article-meta">📖 <?= $a['reading_time'] ?> min de lecture</div>
+                </div>
+            </a>
+            <?php $idx++; endforeach;
+            else: foreach ($staticArts as $a): ?>
+            <a href="/conseils/<?= $a[0] ?>" class="hw-article-card">
+                <div class="hw-article-thumb" style="background:<?= $a[5] ?>;">
+                    <?= $a[7] ?>
+                    <span class="hw-article-badge" style="background:<?= $a[6] ?>;"><?= $a[2] ?></span>
+                </div>
+                <div class="hw-article-body">
+                    <div class="hw-article-title"><?= $a[1] ?></div>
+                    <div class="hw-article-excerpt"><?= $a[4] ?></div>
+                    <div class="hw-article-meta">📖 <?= $a[3] ?> min de lecture</div>
+                </div>
+            </a>
+            <?php endforeach; endif; ?>
+        </div>
+
+        <!-- Tags populaires -->
+        <p class="hw-tags-label">Les sujets les plus populaires</p>
+        <div class="hw-tags">
+            <?php foreach(['Recette journalière','Entretien taxi','Business taxi Congo','Chauffeur fiable','Taxi Brazzaville','Permis de conduire','Taxi vert-blanc','Réussite taxi','Taxi Pointe-Noire'] as $tag): ?>
+            <a href="/conseils?q=<?= urlencode($tag) ?>" class="hw-tag"><?= $tag ?></a>
+            <?php endforeach; ?>
+        </div>
+    </div>
+</section>
+
+<hr class="hw-divider">
+
+<!-- ══════════════════════════════════════════════════════
+     OUTILS — 2 cards illustrées
+═══════════════════════════════════════════════════════ -->
+<div class="hw-section">
+    <h2 class="hw-title">Les outils pour<br><strong>trouver votre job</strong></h2>
+    <div class="hw-tools-grid">
+        <div class="hw-tool-card" style="background:linear-gradient(135deg,#FFF0E6,#FFE0C8);">
+            <div>
+                <div class="hw-tool-title">Créez votre<br>fiche chauffeur</div>
+                <div class="hw-tool-sub">Présentez votre expérience et soyez visible par les propriétaires qui recrutent au Congo.</div>
+                <a href="/chauffeurs" class="hw-tool-btn">Créer ma fiche →</a>
+            </div>
+            <div class="hw-tool-icon">📄</div>
+        </div>
+        <div class="hw-tool-card" style="background:linear-gradient(135deg,#E6F0FF,#C8D8FF);">
+            <div>
+                <div class="hw-tool-title">Créez votre demande<br>de chauffeur</div>
+                <div class="hw-tool-sub">Publiez vos conditions et recevez les candidatures de chauffeurs disponibles.</div>
+                <a href="/proprietaires" class="hw-tool-btn">Publier ma demande →</a>
+            </div>
+            <div class="hw-tool-icon">📋</div>
+        </div>
+    </div>
+</div>
+
+<hr class="hw-divider">
+
+<!-- ══════════════════════════════════════════════════════
+     CATÉGORIES — Pills colorées 4 colonnes
+═══════════════════════════════════════════════════════ -->
+<section class="hw-cats-section">
+    <div class="hw-section hw-section-sm" style="padding-top:64px;">
+        <div class="hw-cats-header">
+            <h2 class="hw-title" style="margin-bottom:0;">On a classé<br><strong>tous nos jobs !</strong></h2>
+            <a href="/offres" class="hw-btn-outline">Voir toutes les offres</a>
+        </div>
+        <div class="hw-cats-grid">
+            <?php
+            $cats = [
+                ['Taxi ordinaire',['Taxi vert-blanc Brazzaville','Taxi bleu-blanc Pointe-Noire','Taxi ordinaire Dolisie','Taxi Nkayi','Taxi sans expérience'],'#6366F1'],
+                ['Taxi climatisé',['Taxi climatisé Brazzaville','Taxi premium Congo','Véhicule climatisé','Conducteur VIP','Taxi confort'],'#8B5CF6'],
+                ['Temps plein',['Chauffeur journée','Poste permanent','6j/7 Brazzaville','Contrat long terme','Temps plein Dolisie'],'#EC4899'],
+                ['Temps partiel',['Chauffeur week-end','Mi-temps taxi','Soirées uniquement','Flexible Congo','Partiel Pointe-Noire'],'#F59E0B'],
+            ];
+            foreach ($cats as $cat): ?>
+            <div>
+                <div class="hw-cat-title"><?= $cat[0] ?></div>
+                <div class="hw-cat-pills">
+                    <?php foreach ($cat[1] as $item): ?>
+                    <a href="/offres?q=<?= urlencode($item) ?>" class="hw-cat-pill"
+                       style="background:<?= $cat[2] ?>18;color:<?= $cat[2] ?>;border-color:<?= $cat[2] ?>30;"
+                       onmouseover="this.style.background='<?= $cat[2] ?>';this.style.color='#fff'"
+                       onmouseout="this.style.background='<?= $cat[2] ?>18';this.style.color='<?= $cat[2] ?>'">
+                        <?= $item ?>
+                    </a>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+            <?php endforeach; ?>
+        </div>
+        <div class="hw-cats-center">
+            <a href="/offres" class="hw-btn-outline">Voir toutes les offres d'emploi</a>
+        </div>
+    </div>
+</section>
+
+<hr class="hw-divider">
+
+<!-- ══════════════════════════════════════════════════════
+     PANORAMAS — 4 cartes sombres 2×2
+═══════════════════════════════════════════════════════ -->
+<div class="hw-section">
+    <h2 class="hw-title">Explorez nos panoramas<br><strong style="font-size:clamp(18px,2vw,26px);font-weight:400;color:#6B7280;">pour éclairer vos choix professionnels</strong></h2>
+    <div class="hw-panos-grid">
+        <?php
+        $panos = [
+            ['Le grand panorama des métiers','Découvrez tous les aspects du taxi au Congo','🚖','linear-gradient(135deg,#0d1b3e 0%,#1e3a8a 100%)'],
+            ['Le grand panorama des salaires','Recettes et revenus moyens selon la ville','💰','linear-gradient(135deg,#14532d 0%,#166534 100%)'],
+            ['Le grand panorama des compétences','Ce que cherchent vraiment les propriétaires','🎯','linear-gradient(135deg,#7f1d1d 0%,#991b1b 100%)'],
+            ['Le grand panorama des formations','Se former pour mieux conduire et gagner plus','📚','linear-gradient(135deg,#78350f 0%,#92400e 100%)'],
+        ];
+        foreach ($panos as $p): ?>
+        <a href="/conseils" class="hw-pano-card" style="background:<?= $p[3] ?>;">
+            <div class="hw-pano-overlay"></div>
+            <div class="hw-pano-emoji"><?= $p[2] ?></div>
+            <div class="hw-pano-body">
+                <div class="hw-pano-title"><?= $p[0] ?></div>
+                <div class="hw-pano-sub"><?= $p[1] ?></div>
+            </div>
+        </a>
+        <?php endforeach; ?>
+    </div>
+</div>
+
+<hr class="hw-divider">
+
+<!-- ══════════════════════════════════════════════════════
+     VILLES — Grande Brazzaville + 4 petites
+═══════════════════════════════════════════════════════ -->
+<div class="hw-section" style="padding-top:48px;">
+    <h2 class="hw-title">Quelle ville pour<br><strong>votre prochain job ?</strong></h2>
+    <div class="hw-cities-grid">
+
+        <a href="/offres?ville=Brazzaville" class="hw-city-card big" style="background:linear-gradient(135deg,#1e3a8a,#0070FF);">
+            <div class="hw-city-emoji">🌆</div>
+            <div class="hw-city-overlay"></div>
+            <div class="hw-city-body">
+                <div class="hw-city-name lg">Brazzaville</div>
+                <div class="hw-city-sub">Capitale · <?= $offersCount > 0 ? $offersCount : '5' ?>+ offres actives</div>
+            </div>
+        </a>
+
+        <a href="/offres?ville=Pointe-Noire" class="hw-city-card small" style="background:linear-gradient(135deg,#064E3B,#008A3D);">
+            <div class="hw-city-emoji sm">🌊</div>
+            <div class="hw-city-overlay"></div>
+            <div class="hw-city-body">
+                <div class="hw-city-name sm">Pointe-Noire</div>
+                <div class="hw-city-sub">Port pétrolier</div>
+            </div>
+        </a>
+
+        <a href="/offres?ville=Dolisie" class="hw-city-card small" style="background:linear-gradient(135deg,#78350F,#B45309);">
+            <div class="hw-city-emoji sm">🌿</div>
+            <div class="hw-city-overlay"></div>
+            <div class="hw-city-body">
+                <div class="hw-city-name sm">Dolisie</div>
+                <div class="hw-city-sub">3e ville du Congo</div>
+            </div>
+        </a>
+
+        <a href="/offres?ville=Nkayi" class="hw-city-card small" style="background:linear-gradient(135deg,#4C1D95,#7C3AED);">
+            <div class="hw-city-emoji sm">🏘️</div>
+            <div class="hw-city-overlay"></div>
+            <div class="hw-city-body">
+                <div class="hw-city-name sm">Nkayi</div>
+                <div class="hw-city-sub">Ville industrielle</div>
+            </div>
+        </a>
+
+        <a href="/offres" class="hw-city-card small" style="background:linear-gradient(135deg,#1F2937,#374151);">
+            <div class="hw-city-emoji sm">🗺️</div>
+            <div class="hw-city-overlay"></div>
+            <div class="hw-city-body">
+                <div class="hw-city-name sm">Autres villes</div>
+                <div class="hw-city-sub">Tout le Congo</div>
+            </div>
+        </a>
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     LIENS SEO
+═══════════════════════════════════════════════════════ -->
+<section class="hw-seo-section">
+    <div style="max-width:1200px;margin:0 auto;padding:0 24px;">
+        <div class="hw-seo-grid">
+            <?php
+            $seoBlocks = [
+                ['Toutes les offres à Brazzaville', ['Taxi vert-blanc Brazzaville','Taxi climatisé Brazzaville','Chauffeur temps plein Brazzaville','Taxi Bacongo','Taxi Poto-Poto']],
+                ['Toutes les offres à Pointe-Noire', ['Taxi bleu-blanc Pointe-Noire','Chauffeur urgent Pointe-Noire','Taxi temps partiel Pointe-Noire','Taxi centre-ville','Taxi aéroport']],
+                ['Trouver emploi par métier', ['Chauffeur de taxi Congo','Chauffeur moto-taxi','Chauffeur privé','Gérant de taxi','Conducteur professionnel']],
+                ['Trouver emploi par type', ['Offres urgentes Congo','Taxi temps plein Congo','Taxi temps partiel Congo','Offres débutant','Véhicule fourni']],
+            ];
+            foreach ($seoBlocks as $block): ?>
+            <div>
+                <p class="hw-seo-label"><?= $block[0] ?></p>
+                <?php foreach ($block[1] as $lnk): ?>
+                <a href="/offres?q=<?= urlencode($lnk) ?>" class="hw-seo-link"><?= $lnk ?></a>
+                <?php endforeach; ?>
+            </div>
+            <?php endforeach; ?>
+        </div>
+    </div>
+</section>
+
+<hr class="hw-divider">
+
+<!-- ══════════════════════════════════════════════════════
+     TÉMOIGNAGES
+═══════════════════════════════════════════════════════ -->
+<section class="hw-testi-section">
+    <div style="max-width:1200px;margin:0 auto;padding:0 24px;">
+        <div class="hw-testi-header">
+            <p class="hw-testi-eyebrow">Ils nous font confiance</p>
+            <h2 class="hw-testi-title">Ce que disent nos membres</h2>
+        </div>
+        <div class="hw-testi-grid">
+            <?php foreach([
+                ['Merlin O.','Propriétaire · Brazzaville','M','#0070FF','J\'ai trouvé un chauffeur sérieux en 2 jours seulement. FLASH m\'a évité des semaines de recherche. Je recommande à tous les propriétaires.'],
+                ['Brice N.','Chauffeur · Pointe-Noire','B','#008A3D','Grâce à FLASH j\'ai retrouvé du travail rapidement. Le propriétaire m\'a contacté le jour même. Simple et efficace même sur téléphone.'],
+                ['Céleste M.','Propriétaire · Dolisie','C','#FFC400','Les conseils du blog m\'ont aidé à fixer une bonne recette. Maintenant ma relation avec mon chauffeur est claire et tout se passe très bien.'],
+            ] as $t): ?>
+            <div class="hw-testi-card">
+                <div class="hw-testi-quote">"</div>
+                <div class="hw-testi-stars">★★★★★</div>
+                <p class="hw-testi-text"><?= $t[4] ?></p>
+                <div class="hw-testi-author">
+                    <div class="hw-testi-avatar" style="background:<?= $t[3] ?>;"><?= $t[2] ?></div>
+                    <div>
+                        <div class="hw-testi-name"><?= $t[0] ?></div>
+                        <div class="hw-testi-role"><?= $t[1] ?></div>
+                    </div>
+                </div>
+            </div>
+            <?php endforeach; ?>
+        </div>
+    </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════
+     CTA FINAL
+═══════════════════════════════════════════════════════ -->
+<section class="hw-cta-section">
+    <div style="max-width:1200px;margin:0 auto;padding:0 24px;">
+        <div class="hw-cta-card">
+            <h2 class="hw-cta-title">Prêt à démarrer<br>votre activité taxi ?</h2>
+            <p class="hw-cta-sub">Rejoignez FLASH dès maintenant. Gratuit, rapide, efficace.</p>
+            <div class="hw-cta-btns">
+                <a href="/chauffeurs" class="hw-cta-btn-white">Je dépose mon CV</a>
+                <a href="/proprietaires" class="hw-cta-btn-yellow">Je cherche un chauffeur</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- WhatsApp flottant -->
+<a href="https://wa.me/242000000000" target="_blank" rel="noopener" class="wha-float" aria-label="Contactez-nous sur WhatsApp">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+
+<script>
+/* ── Carousel propriétaires ───────────────────── */
+(function() {
+    var cards = <?= json_encode($ownerCards) ?>;
+    var current = 0;
+    var perPage = window.innerWidth >= 1024 ? 3 : window.innerWidth >= 768 ? 2 : 1;
+    var total = Math.ceil(cards.length / perPage);
+
+    function renderCards(page) {
+        var carousel = document.getElementById('ownersCarousel');
+        if (!carousel) return;
+        var start = page * perPage;
+        var slice = cards.slice(start, start + perPage);
+        carousel.innerHTML = slice.map(function(o) {
+            return '<a href="/offres" class="hw-owner-card">' +
+                '<div class="hw-owner-photo-placeholder" style="background:' + o.photo_bg + ';position:relative;">' +
+                    '<span style="font-size:80px;opacity:0.35;">' + o.photo_emoji + '</span>' +
+                    '<div style="position:absolute;bottom:12px;left:12px;background:' + o.bg + ';color:#fff;border-radius:10px;padding:6px 12px;font-size:13px;font-weight:700;font-family:Montserrat,sans-serif;display:flex;align-items:center;gap:6px;">' + o.emoji + '</div>' +
+                '</div>' +
+                '<div class="hw-owner-info">' +
+                    '<div class="hw-owner-info-left">' +
+                        '<div class="hw-owner-name">' + o.name + '</div>' +
+                        '<div class="hw-owner-count">' + o.jobs + '</div>' +
+                    '</div>' +
+                    '<div class="hw-owner-arrow">' +
+                        '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>' +
+                    '</div>' +
+                '</div>' +
+            '</a>';
+        }).join('');
+        // Update dots
+        for (var i = 0; i < total; i++) {
+            var dot = document.getElementById('dot' + i);
+            if (dot) {
+                dot.className = i === page ? 'hw-dot' : 'hw-dot inactive';
+            }
+        }
+    }
+
+    window.slideOwners = function(dir) {
+        current = (current + dir + total) % total;
+        renderCards(current);
+    };
+
+    // Init dots
+    var dotsEl = document.querySelector('.hw-carousel-dots');
+    if (dotsEl) {
+        dotsEl.innerHTML = '';
+        for (var i = 0; i < total; i++) {
+            dotsEl.innerHTML += '<div class="hw-dot ' + (i > 0 ? 'inactive' : '') + '" id="dot' + i + '" onclick="slideOwners(' + (i - current) + ')"></div>';
+        }
+    }
+})();
+
+/* ── Compteur animé ───────────────────────────── */
+function animateNumber(el) {
+    var target = parseInt(el.getAttribute('data-target'));
+    var duration = 1500;
+    var start = 0;
+    var step = (target / duration) * 16;
+    var timer = setInterval(function() {
+        start += step;
+        if (start >= target) { start = target; clearInterval(timer); }
+        el.textContent = Math.floor(start).toLocaleString('fr-FR');
+    }, 16);
+}
+var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+        if (entry.isIntersecting && !entry.target.classList.contains('animated')) {
+            entry.target.classList.add('animated');
+            animateNumber(entry.target);
+        }
+    });
+}, { threshold: 0.5 });
+document.querySelectorAll('[data-target]').forEach(function(el) { observer.observe(el); });
+</script>
+
+<?php include __DIR__ . '/includes/footer.php'; ?>

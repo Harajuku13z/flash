@@ -1,0 +1,12 @@
+# Bloquer l'exécution de scripts dans le dossier uploads
+Options -Indexes
+<FilesMatch "\.(php|php3|php4|php5|php7|phtml|pl|py|jsp|asp|sh|cgi)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# N'autoriser que les types de fichiers légitimes
+<FilesMatch "\.(pdf|doc|docx|jpg|jpeg|png|webp|gif)$">
+    Order Allow,Deny
+    Allow from all
+</FilesMatch>
