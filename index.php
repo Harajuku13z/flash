@@ -1254,8 +1254,8 @@ include __DIR__ . '/includes/header.php';
     .hw-feature-grid { grid-template-columns: 1fr; }
     .hw-feature-big { min-height: 320px; }
     .hw-stats4-grid { grid-template-columns: repeat(2, 1fr); }
-    .hw-app-section { grid-template-columns: 1fr; gap: 40px; padding: 48px 0; }
-    .hw-app-phones-wrap { min-height: 300px; border-radius: 0; }
+    .hw-app-section { grid-template-columns: 1fr; gap: 40px; padding: 48px 24px; }
+    .hw-app-phones-wrap { min-height: 300px; border-radius: 16px; }
     .hw-articles-grid { grid-template-columns: repeat(2, 1fr); }
     .hw-tools-grid { grid-template-columns: 1fr; }
     .hw-tool-card { padding: 32px 28px 0; }
@@ -1281,8 +1281,8 @@ include __DIR__ . '/includes/header.php';
     .hw-seo-grid { grid-template-columns: 1fr 1fr; }
     .hw-testi-grid { grid-template-columns: 1fr; }
     .hw-cta-card { padding: 40px 24px; }
-    .hw-app-section { padding: 32px 0; gap: 28px; }
-    .hw-app-phones-wrap { min-height: 240px; padding: 0; border-radius: 0; }
+    .hw-app-section { padding: 32px 0; gap: 0; }
+    .hw-app-phones-wrap { min-height: 320px; padding: 0; border-radius: 0; width: 100vw; margin-left: calc(-50vw + 50%); }
     .hw-app-btns-row { flex-direction: column; }
     .hw-s4-card { padding: 24px 20px; min-height: 180px; }
     .hw-stats4-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
