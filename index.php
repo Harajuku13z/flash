@@ -56,16 +56,16 @@ include __DIR__ . '/includes/header.php';
 }
 .hw-hero-text h1 {
     font-family: 'Montserrat', sans-serif;
-    font-size: clamp(28px, 4vw, 54px);
+    font-size: clamp(26px, 3.5vw, 48px);
     font-weight: 400;
     color: #fff;
-    line-height: 1.15;
+    line-height: 1.2;
     margin: 0;
-    text-shadow: 0 2px 20px rgba(0,0,0,0.4);
+    text-shadow: 0 2px 20px rgba(0,0,0,0.5);
 }
 .hw-hero-text h1 strong {
     font-weight: 900;
-    display: block;
+    display: inline;
 }
 .hw-hero-text h1 .hw-count {
     font-weight: 900;
@@ -1212,7 +1212,7 @@ include __DIR__ . '/includes/header.php';
 ═══════════════════════════════════════════════════════ -->
 <section class="hw-hero">
     <!-- Image pleine largeur -->
-    <img src="/assets/images/taxi-hero.jpg"
+    <img src="/assets/images/taxi-hero.png"
          alt="Propriétaire de taxi remet les clés à son chauffeur à Brazzaville"
          class="hw-hero-img">
     <!-- Overlay dégradé pour lisibilité -->
@@ -1220,11 +1220,8 @@ include __DIR__ . '/includes/header.php';
     <!-- Texte overlay côté droit -->
     <div class="hw-hero-text">
         <h1>
-            Notre job, vous aider<br>
-            à trouver le vôtre parmi<br>
-            <strong>
-                <span data-target="<?= $displayOffers ?>"><?= number_format($displayOffers,0,',',' ') ?></span> offres
-            </strong>
+            Notre job, vous aider à trouver le vôtre parmi
+            <strong><span data-target="<?= $displayOffers ?>"><?= number_format($displayOffers,0,',',' ') ?></span> offres</strong>
         </h1>
     </div>
 </section>

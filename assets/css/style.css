@@ -38,6 +38,7 @@ body { font-family: 'Montserrat', 'Inter', sans-serif; color: var(--text); backg
     height: 64px;
 }
 .logo-link { display: flex; align-items: center; text-decoration: none; flex-shrink: 0; }
+.logo-link img { height: 48px; width: auto; display: block; object-fit: contain; }
 .logo-link svg text, .logo-flash { fill: var(--blue); }
 .logo-text { font-size: 28px; font-weight: 900; color: var(--blue); letter-spacing: -1px; font-family: 'Montserrat', sans-serif; }
 
