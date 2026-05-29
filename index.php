@@ -817,14 +817,14 @@ include __DIR__ . '/includes/header.php';
 }
 .hw-tool-card {
     border-radius: 20px;
-    padding: 40px;
+    padding: 40px 40px 0;
     display: grid;
-    grid-template-columns: 1fr auto;
+    grid-template-columns: 1fr 1fr;
     gap: 24px;
     align-items: end;
     overflow: hidden;
     position: relative;
-    min-height: 220px;
+    min-height: 240px;
 }
 .hw-tool-title {
     font-family: 'Montserrat', sans-serif;
@@ -839,9 +839,12 @@ include __DIR__ . '/includes/header.php';
     color: #6B7280;
     line-height: 1.6;
     margin-bottom: 20px;
+    max-width: 240px;
 }
 .hw-tool-btn {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
     background: #111;
     color: #fff;
     border-radius: 50px;
@@ -851,9 +854,33 @@ include __DIR__ . '/includes/header.php';
     text-decoration: none;
     font-family: 'Montserrat', sans-serif;
     transition: background 0.2s;
+    margin-bottom: 40px;
 }
 .hw-tool-btn:hover { background: #333; }
-.hw-tool-icon { font-size: 80px; line-height: 1; flex-shrink: 0; }
+.hw-tool-mockup {
+    align-self: end;
+    position: relative;
+    height: 190px;
+    overflow: hidden;
+}
+.hw-tool-mockup img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+    border-radius: 12px 12px 0 0;
+    box-shadow: 0 -8px 32px rgba(0,0,0,0.15);
+    display: block;
+}
+.hw-tool-mockup-placeholder {
+    width: 100%;
+    height: 100%;
+    border-radius: 12px 12px 0 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 64px;
+}
 
 /* ── Catégories ───────────────────────────────── */
 .hw-cats-section { background: #F9FAFB; border-top: 1px solid #E5E7EB; padding: 64px 0; }
@@ -915,40 +942,65 @@ include __DIR__ . '/includes/header.php';
     border-radius: 18px;
     overflow: hidden;
     position: relative;
-    height: 170px;
+    height: 200px;
     display: block;
     text-decoration: none;
     transition: transform 0.3s;
+    background: #1a1a2e;
 }
 .hw-pano-card:hover { transform: scale(1.02); }
+.hw-pano-card:hover .hw-pano-cta { background: rgba(255,255,255,0.25); }
+.hw-pano-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    opacity: 0.65;
+    transition: opacity 0.3s, transform 0.4s;
+}
+.hw-pano-card:hover .hw-pano-img { opacity: 0.8; transform: scale(1.05); }
 .hw-pano-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(to top, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0) 60%);
-}
-.hw-pano-emoji {
-    position: absolute;
-    top: 18px;
-    left: 20px;
-    font-size: 32px;
+    background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.2) 60%);
+    z-index: 1;
 }
 .hw-pano-body {
     position: absolute;
     bottom: 0;
     left: 0;
     right: 0;
-    padding: 18px 20px;
+    padding: 20px 22px;
     z-index: 2;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 12px;
 }
 .hw-pano-title {
     font-family: 'Montserrat', sans-serif;
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 800;
     color: #fff;
     margin-bottom: 4px;
     line-height: 1.3;
 }
-.hw-pano-sub { font-size: 12px; color: rgba(255,255,255,0.75); }
+.hw-pano-sub { font-size: 12px; color: rgba(255,255,255,0.7); }
+.hw-pano-cta {
+    flex-shrink: 0;
+    background: rgba(255,255,255,0.15);
+    border: 1.5px solid rgba(255,255,255,0.4);
+    color: #fff;
+    border-radius: 50px;
+    padding: 8px 16px;
+    font-size: 12px;
+    font-weight: 700;
+    font-family: 'Montserrat', sans-serif;
+    white-space: nowrap;
+    transition: background 0.2s;
+}
 
 /* ── Villes ───────────────────────────────────── */
 .hw-cities-grid {
@@ -965,25 +1017,28 @@ include __DIR__ . '/includes/header.php';
     align-items: flex-end;
     text-decoration: none;
     transition: transform 0.3s;
+    background: #111;
 }
 .hw-city-card:hover { transform: scale(1.01); }
+.hw-city-card:hover .hw-city-img { transform: scale(1.06); opacity: 0.75; }
+.hw-city-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    opacity: 0.6;
+    transition: opacity 0.3s, transform 0.4s;
+}
 .hw-city-card.big { grid-row: 1 / 3; min-height: 300px; }
 .hw-city-card.small { min-height: 138px; }
 .hw-city-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.1) 60%);
+    background: linear-gradient(to top, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.1) 60%);
+    z-index: 1;
 }
-.hw-city-emoji {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 80px;
-    opacity: 0.18;
-}
-.hw-city-emoji.sm { font-size: 50px; }
 .hw-city-body {
     position: relative;
     z-index: 2;
@@ -1005,7 +1060,7 @@ include __DIR__ . '/includes/header.php';
 .hw-seo-section { border-top: 1px solid #E5E7EB; padding: 48px 0; }
 .hw-seo-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 32px;
 }
 .hw-seo-label {
@@ -1196,10 +1251,11 @@ include __DIR__ . '/includes/header.php';
     .hw-app-soon-phones { grid-template-columns: repeat(4, 1fr); }
     .hw-articles-grid { grid-template-columns: repeat(2, 1fr); }
     .hw-tools-grid { grid-template-columns: 1fr; }
+    .hw-tool-card { padding: 32px 28px 0; }
     .hw-cats-grid { grid-template-columns: repeat(2, 1fr); }
-    .hw-panos-grid { grid-template-columns: 1fr; }
+    .hw-panos-grid { grid-template-columns: 1fr 1fr; }
     .hw-cities-grid { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
-    .hw-city-card.big { grid-row: auto; min-height: 160px; }
+    .hw-city-card.big { grid-row: auto; min-height: 200px; }
     .hw-seo-grid { grid-template-columns: repeat(2, 1fr); }
     .hw-testi-grid { grid-template-columns: repeat(2, 1fr); }
 }
@@ -1941,26 +1997,40 @@ include __DIR__ . '/includes/header.php';
 <hr class="hw-divider">
 
 <!-- ══════════════════════════════════════════════════════
-     OUTILS — 2 cards illustrées
+     OUTILS — 2 cards illustrées avec photo
 ═══════════════════════════════════════════════════════ -->
 <div class="hw-section">
     <h2 class="hw-title">Les outils pour<br><strong>trouver votre job</strong></h2>
     <div class="hw-tools-grid">
-        <div class="hw-tool-card" style="background:linear-gradient(135deg,#FFF0E6,#FFE0C8);">
+        <div class="hw-tool-card" style="background:linear-gradient(135deg,#FFF0E6,#FFE8D0);">
             <div>
                 <div class="hw-tool-title">Créez votre<br>fiche chauffeur</div>
                 <div class="hw-tool-sub">Présentez votre expérience et soyez visible par les propriétaires qui recrutent au Congo.</div>
-                <a href="/chauffeurs" class="hw-tool-btn">Créer ma fiche →</a>
+                <a href="/chauffeurs" class="hw-tool-btn">
+                    Créer ma fiche
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
             </div>
-            <div class="hw-tool-icon">📄</div>
+            <div class="hw-tool-mockup">
+                <img src="/assets/images/taxi-card-1.jpg" alt="Fiche chauffeur"
+                     onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+                <div class="hw-tool-mockup-placeholder" style="background:linear-gradient(180deg,#FFD5A8,#FFB380);display:none;">📄</div>
+            </div>
         </div>
-        <div class="hw-tool-card" style="background:linear-gradient(135deg,#E6F0FF,#C8D8FF);">
+        <div class="hw-tool-card" style="background:linear-gradient(135deg,#E8F0FF,#D0E2FF);">
             <div>
-                <div class="hw-tool-title">Créez votre demande<br>de chauffeur</div>
+                <div class="hw-tool-title">Publiez votre<br>offre de taxi</div>
                 <div class="hw-tool-sub">Publiez vos conditions et recevez les candidatures de chauffeurs disponibles.</div>
-                <a href="/proprietaires" class="hw-tool-btn">Publier ma demande →</a>
+                <a href="/proprietaires" class="hw-tool-btn">
+                    Publier une offre
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
             </div>
-            <div class="hw-tool-icon">📋</div>
+            <div class="hw-tool-mockup">
+                <img src="/assets/images/taxi-card-2.jpg" alt="Offre taxi"
+                     onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+                <div class="hw-tool-mockup-placeholder" style="background:linear-gradient(180deg,#A8CBFF,#80AFFF);display:none;">📋</div>
+            </div>
         </div>
     </div>
 </div>
@@ -2009,25 +2079,29 @@ include __DIR__ . '/includes/header.php';
 <hr class="hw-divider">
 
 <!-- ══════════════════════════════════════════════════════
-     PANORAMAS — 4 cartes sombres 2×2
+     PANORAMAS — 4 cartes photo 2×2
 ═══════════════════════════════════════════════════════ -->
 <div class="hw-section">
     <h2 class="hw-title">Explorez nos panoramas<br><strong style="font-size:clamp(18px,2vw,26px);font-weight:400;color:#6B7280;">pour éclairer vos choix professionnels</strong></h2>
     <div class="hw-panos-grid">
         <?php
         $panos = [
-            ['Le grand panorama des métiers','Découvrez tous les aspects du taxi au Congo','🚖','linear-gradient(135deg,#0d1b3e 0%,#1e3a8a 100%)'],
-            ['Le grand panorama des salaires','Recettes et revenus moyens selon la ville','💰','linear-gradient(135deg,#14532d 0%,#166534 100%)'],
-            ['Le grand panorama des compétences','Ce que cherchent vraiment les propriétaires','🎯','linear-gradient(135deg,#7f1d1d 0%,#991b1b 100%)'],
-            ['Le grand panorama des formations','Se former pour mieux conduire et gagner plus','📚','linear-gradient(135deg,#78350f 0%,#92400e 100%)'],
+            ['Le grand panorama<br>des métiers',    'Découvrez tous les aspects du taxi au Congo', '/assets/images/taxi-card-1.jpg', 'Découvrir les métiers'],
+            ['Le grand panorama<br>des salaires',   'Recettes et revenus moyens selon la ville',   '/assets/images/taxi-card-2.jpg', 'Découvrir les salaires'],
+            ['Le grand panorama<br>des compétences','Ce que cherchent vraiment les propriétaires', '/assets/images/taxi-hero.png',   'Découvrir les compétences'],
+            ['Le grand panorama<br>des formations', 'Se former pour mieux conduire et gagner plus', '/assets/images/taxi-card-3.jpg','Découvrir les formations'],
         ];
         foreach ($panos as $p): ?>
-        <a href="/conseils" class="hw-pano-card" style="background:<?= $p[3] ?>;">
+        <a href="/conseils" class="hw-pano-card">
+            <img src="<?= $p[2] ?>" alt="<?= strip_tags($p[0]) ?>" class="hw-pano-img"
+                 onerror="this.style.display='none'">
             <div class="hw-pano-overlay"></div>
-            <div class="hw-pano-emoji"><?= $p[2] ?></div>
             <div class="hw-pano-body">
-                <div class="hw-pano-title"><?= $p[0] ?></div>
-                <div class="hw-pano-sub"><?= $p[1] ?></div>
+                <div>
+                    <div class="hw-pano-title"><?= $p[0] ?></div>
+                    <div class="hw-pano-sub"><?= $p[1] ?></div>
+                </div>
+                <div class="hw-pano-cta"><?= $p[3] ?> →</div>
             </div>
         </a>
         <?php endforeach; ?>
@@ -2037,23 +2111,28 @@ include __DIR__ . '/includes/header.php';
 <hr class="hw-divider">
 
 <!-- ══════════════════════════════════════════════════════
-     VILLES — Grande Brazzaville + 4 petites
+     VILLES — Grande Brazzaville + 4 petites (photos)
 ═══════════════════════════════════════════════════════ -->
 <div class="hw-section" style="padding-top:48px;">
     <h2 class="hw-title">Quelle ville pour<br><strong>votre prochain job ?</strong></h2>
     <div class="hw-cities-grid">
 
-        <a href="/offres?ville=Brazzaville" class="hw-city-card big" style="background:linear-gradient(135deg,#1e3a8a,#0070FF);">
-            <div class="hw-city-emoji">🌆</div>
+        <a href="/offres?ville=Brazzaville" class="hw-city-card big">
+            <img src="/assets/images/taxi-hero.png" alt="Brazzaville" class="hw-city-img"
+                 onerror="this.style.display='none';this.parentElement.style.background='linear-gradient(135deg,#1e3a8a,#0070FF)'">
             <div class="hw-city-overlay"></div>
             <div class="hw-city-body">
                 <div class="hw-city-name lg">Brazzaville</div>
                 <div class="hw-city-sub">Capitale · <?= $offersCount > 0 ? $offersCount : '5' ?>+ offres actives</div>
+                <div style="margin-top:14px;display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.15);border:1.5px solid rgba(255,255,255,0.35);color:#fff;border-radius:50px;padding:7px 16px;font-size:12px;font-weight:700;font-family:Montserrat,sans-serif;">
+                    Voir les offres →
+                </div>
             </div>
         </a>
 
-        <a href="/offres?ville=Pointe-Noire" class="hw-city-card small" style="background:linear-gradient(135deg,#064E3B,#008A3D);">
-            <div class="hw-city-emoji sm">🌊</div>
+        <a href="/offres?ville=Pointe-Noire" class="hw-city-card small">
+            <img src="/assets/images/taxi-card-1.jpg" alt="Pointe-Noire" class="hw-city-img"
+                 onerror="this.style.display='none';this.parentElement.style.background='linear-gradient(135deg,#064E3B,#008A3D)'">
             <div class="hw-city-overlay"></div>
             <div class="hw-city-body">
                 <div class="hw-city-name sm">Pointe-Noire</div>
@@ -2061,8 +2140,9 @@ include __DIR__ . '/includes/header.php';
             </div>
         </a>
 
-        <a href="/offres?ville=Dolisie" class="hw-city-card small" style="background:linear-gradient(135deg,#78350F,#B45309);">
-            <div class="hw-city-emoji sm">🌿</div>
+        <a href="/offres?ville=Dolisie" class="hw-city-card small">
+            <img src="/assets/images/taxi-card-2.jpg" alt="Dolisie" class="hw-city-img"
+                 onerror="this.style.display='none';this.parentElement.style.background='linear-gradient(135deg,#78350F,#B45309)'">
             <div class="hw-city-overlay"></div>
             <div class="hw-city-body">
                 <div class="hw-city-name sm">Dolisie</div>
@@ -2070,8 +2150,9 @@ include __DIR__ . '/includes/header.php';
             </div>
         </a>
 
-        <a href="/offres?ville=Nkayi" class="hw-city-card small" style="background:linear-gradient(135deg,#4C1D95,#7C3AED);">
-            <div class="hw-city-emoji sm">🏘️</div>
+        <a href="/offres?ville=Nkayi" class="hw-city-card small">
+            <img src="/assets/images/taxi-card-3.jpg" alt="Nkayi" class="hw-city-img"
+                 onerror="this.style.display='none';this.parentElement.style.background='linear-gradient(135deg,#4C1D95,#7C3AED)'">
             <div class="hw-city-overlay"></div>
             <div class="hw-city-body">
                 <div class="hw-city-name sm">Nkayi</div>
@@ -2079,8 +2160,9 @@ include __DIR__ . '/includes/header.php';
             </div>
         </a>
 
-        <a href="/offres" class="hw-city-card small" style="background:linear-gradient(135deg,#1F2937,#374151);">
-            <div class="hw-city-emoji sm">🗺️</div>
+        <a href="/offres" class="hw-city-card small">
+            <img src="/assets/images/taxi-card-4.jpg" alt="Autres villes" class="hw-city-img"
+                 onerror="this.style.display='none';this.parentElement.style.background='linear-gradient(135deg,#1F2937,#374151)'">
             <div class="hw-city-overlay"></div>
             <div class="hw-city-body">
                 <div class="hw-city-name sm">Autres villes</div>
@@ -2098,10 +2180,9 @@ include __DIR__ . '/includes/header.php';
         <div class="hw-seo-grid">
             <?php
             $seoBlocks = [
-                ['Toutes les offres à Brazzaville', ['Taxi vert-blanc Brazzaville','Taxi climatisé Brazzaville','Chauffeur temps plein Brazzaville','Taxi Bacongo','Taxi Poto-Poto']],
-                ['Toutes les offres à Pointe-Noire', ['Taxi bleu-blanc Pointe-Noire','Chauffeur urgent Pointe-Noire','Taxi temps partiel Pointe-Noire','Taxi centre-ville','Taxi aéroport']],
-                ['Trouver emploi par métier', ['Chauffeur de taxi Congo','Chauffeur moto-taxi','Chauffeur privé','Gérant de taxi','Conducteur professionnel']],
-                ['Trouver emploi par type', ['Offres urgentes Congo','Taxi temps plein Congo','Taxi temps partiel Congo','Offres débutant','Véhicule fourni']],
+                ['Toutes les offres chauffeur', ['Chauffeur taxi Brazzaville','Chauffeur taxi Pointe-Noire','Chauffeur temps plein Congo','Chauffeur temps partiel Congo','Offres urgent chauffeur','Taxi vert-blanc Brazzaville','Taxi bleu-blanc Pointe-Noire']],
+                ['Toutes les offres d\'alternance', ['Chauffeur débutant Congo','Taxi avec véhicule fourni','Chauffeur sans expérience','Formation chauffeur taxi','Stage taxi Brazzaville','Apprenti conducteur Congo']],
+                ['Toutes les offres intérim', ['Chauffeur intérim Brazzaville','Chauffeur ponctuel Congo','Mission taxi courte durée','Remplacement chauffeur','Intérim taxi Pointe-Noire','Chauffeur weekend Congo']],
             ];
             foreach ($seoBlocks as $block): ?>
             <div>
@@ -2109,40 +2190,6 @@ include __DIR__ . '/includes/header.php';
                 <?php foreach ($block[1] as $lnk): ?>
                 <a href="/offres?q=<?= urlencode($lnk) ?>" class="hw-seo-link"><?= $lnk ?></a>
                 <?php endforeach; ?>
-            </div>
-            <?php endforeach; ?>
-        </div>
-    </div>
-</section>
-
-<hr class="hw-divider">
-
-<!-- ══════════════════════════════════════════════════════
-     TÉMOIGNAGES
-═══════════════════════════════════════════════════════ -->
-<section class="hw-testi-section">
-    <div style="max-width:1200px;margin:0 auto;padding:0 24px;">
-        <div class="hw-testi-header">
-            <p class="hw-testi-eyebrow">Ils nous font confiance</p>
-            <h2 class="hw-testi-title">Ce que disent nos membres</h2>
-        </div>
-        <div class="hw-testi-grid">
-            <?php foreach([
-                ['Merlin O.','Propriétaire · Brazzaville','M','#0070FF','J\'ai trouvé un chauffeur sérieux en 2 jours seulement. FLASH m\'a évité des semaines de recherche. Je recommande à tous les propriétaires.'],
-                ['Brice N.','Chauffeur · Pointe-Noire','B','#008A3D','Grâce à FLASH j\'ai retrouvé du travail rapidement. Le propriétaire m\'a contacté le jour même. Simple et efficace même sur téléphone.'],
-                ['Céleste M.','Propriétaire · Dolisie','C','#FFC400','Les conseils du blog m\'ont aidé à fixer une bonne recette. Maintenant ma relation avec mon chauffeur est claire et tout se passe très bien.'],
-            ] as $t): ?>
-            <div class="hw-testi-card">
-                <div class="hw-testi-quote">"</div>
-                <div class="hw-testi-stars">★★★★★</div>
-                <p class="hw-testi-text"><?= $t[4] ?></p>
-                <div class="hw-testi-author">
-                    <div class="hw-testi-avatar" style="background:<?= $t[3] ?>;"><?= $t[2] ?></div>
-                    <div>
-                        <div class="hw-testi-name"><?= $t[0] ?></div>
-                        <div class="hw-testi-role"><?= $t[1] ?></div>
-                    </div>
-                </div>
             </div>
             <?php endforeach; ?>
         </div>
@@ -2164,11 +2211,6 @@ include __DIR__ . '/includes/header.php';
         </div>
     </div>
 </section>
-
-<!-- WhatsApp flottant -->
-<a href="https://wa.me/242000000000" target="_blank" rel="noopener" class="wha-float" aria-label="Contactez-nous sur WhatsApp">
-    <svg width="28" height="28" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-</a>
 
 <script>
 /* ── Carousel propriétaires ───────────────────── */
