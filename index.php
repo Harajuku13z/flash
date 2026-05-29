@@ -665,9 +665,8 @@ include __DIR__ . '/includes/header.php';
     width: 100%;
     height: 100%;
     display: block;
-    object-fit: contain;
+    object-fit: cover;
     object-position: center center;
-    padding: 24px;
 }
 .hw-app-text {}
 .hw-app-text-title {
