@@ -1282,7 +1282,7 @@ include __DIR__ . '/includes/header.php';
     .hw-testi-grid { grid-template-columns: 1fr; }
     .hw-cta-card { padding: 40px 24px; }
     .hw-app-section { padding: 0 0 48px; gap: 0; }
-    .hw-app-phones-wrap { min-height: 360px; padding: 0; border-radius: 24px 24px 0 0; width: 100vw; margin-left: calc(-50vw + 50%); }
+    .hw-app-phones-wrap { min-height: 360px; padding: 0; border-radius: 24px; width: calc(100vw - 32px); margin-left: calc(-50vw + 50% + 16px); }
     .hw-app-text { padding: 28px 24px 0; }
     .hw-app-text-title { font-size: 26px; margin-bottom: 12px; }
     .hw-app-text-sub { font-size: 14px; margin-bottom: 24px; }
