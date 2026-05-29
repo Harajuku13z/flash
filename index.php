@@ -1271,7 +1271,8 @@ include __DIR__ . '/includes/header.php';
     .hw-hero { height: 320px; }
     .hw-hero-text { right: 5%; left: 5%; text-align: left; }
     .hw-search-bar { grid-template-columns: 1fr auto; }
-    .hw-search-field:last-of-type { display: none; }
+    .hw-search-field:first-of-type { display: none; }
+    .hw-search-field + .hw-search-field { border-left: none; }
     .hw-carousel { grid-template-columns: 1fr; }
     .hw-feature-stack { display: none; }
     .hw-articles-grid { grid-template-columns: 1fr; }
