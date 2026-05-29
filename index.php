@@ -546,145 +546,161 @@ include __DIR__ . '/includes/header.php';
 }
 .hw-feature-card-arrow svg { color: #fff; }
 
-/* ── Stats 2 grandes cartes ───────────────────── */
-.hw-stats-grid {
+/* ── Stats 4 cartes Hello Work ────────────────── */
+.hw-stats4-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-    margin-bottom: 20px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-top: 40px;
 }
-.hw-stat-card {
+.hw-s4-card {
     border-radius: 22px;
-    padding: 40px 44px;
+    padding: 32px 28px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    min-height: 240px;
+    min-height: 220px;
     position: relative;
     overflow: hidden;
 }
-.hw-stat-card::before {
-    content: '';
-    position: absolute;
-    top: -40px; right: -40px;
-    width: 200px; height: 200px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.08);
-}
-.hw-stat-num {
+.hw-s4-num {
     font-family: 'Montserrat', sans-serif;
-    font-size: clamp(48px, 6vw, 76px);
+    font-size: clamp(44px, 4vw, 64px);
     font-weight: 900;
-    color: #fff;
+    color: #111;
     line-height: 1;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
 }
-.hw-stat-label {
-    font-size: 15px;
-    color: rgba(255,255,255,0.8);
+.hw-s4-num-white { color: #fff; }
+.hw-s4-desc {
+    font-size: 13px;
+    color: #6B7280;
     line-height: 1.5;
 }
-.hw-stat-btn {
+.hw-s4-desc-white { color: rgba(255,255,255,0.75); }
+.hw-s4-icon-circle {
+    width: 52px; height: 52px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    margin-bottom: 16px;
+    flex-shrink: 0;
+}
+.hw-s4-eyebrow {
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-family: 'Montserrat', sans-serif;
+    margin-bottom: 10px;
+}
+.hw-s4-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 16px;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.3;
+    margin-bottom: 20px;
+    flex: 1;
+}
+.hw-s4-pill {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    border: 1.5px solid rgba(255,255,255,0.5);
+    background: #111;
     color: #fff;
     border-radius: 50px;
-    padding: 10px 22px;
+    padding: 10px 20px;
     font-size: 13px;
     font-weight: 700;
     text-decoration: none;
     font-family: 'Montserrat', sans-serif;
     width: fit-content;
-    transition: all 0.2s;
+    transition: background 0.2s;
 }
-.hw-stat-btn:hover { background: rgba(255,255,255,0.15); border-color: #fff; }
+.hw-s4-pill:hover { background: #333; }
+.hw-s4-pill-white {
+    background: #fff;
+    color: #111;
+}
+.hw-s4-pill-white:hover { background: #F3F4F6; }
 
-/* ── App section ──────────────────────────────── */
-.hw-app-card {
-    border-radius: 22px;
+/* ── App section "bientôt disponible" ─────────── */
+.hw-app-soon {
+    border-radius: 24px;
     background: linear-gradient(110deg, #0d1b3e 0%, #0a2255 100%);
-    padding: 48px;
+    padding: 56px 60px;
     display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 40px;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
     align-items: center;
     overflow: hidden;
     position: relative;
 }
-.hw-app-card::before {
+.hw-app-soon::before {
     content: '';
     position: absolute;
-    right: -60px; bottom: -60px;
-    width: 300px; height: 300px;
+    right: -80px; bottom: -80px;
+    width: 360px; height: 360px;
     border-radius: 50%;
-    background: rgba(0,112,255,0.15);
+    background: rgba(0,112,255,0.12);
+    pointer-events: none;
 }
-.hw-app-eyebrow {
+.hw-app-soon-eyebrow {
     font-size: 11px;
-    font-weight: 700;
+    font-weight: 800;
     color: #FFC400;
     text-transform: uppercase;
     letter-spacing: 1.5px;
-    margin-bottom: 10px;
+    margin-bottom: 14px;
     font-family: 'Montserrat', sans-serif;
 }
-.hw-app-title {
+.hw-app-soon-title {
     font-family: 'Montserrat', sans-serif;
-    font-size: clamp(20px, 2.5vw, 28px);
-    font-weight: 800;
+    font-size: clamp(22px, 2.5vw, 30px);
+    font-weight: 900;
     color: #fff;
     line-height: 1.2;
-    margin-bottom: 12px;
+    margin-bottom: 14px;
 }
-.hw-app-sub {
+.hw-app-soon-sub {
     font-size: 14px;
-    color: rgba(255,255,255,0.7);
-    line-height: 1.6;
-    margin-bottom: 24px;
+    color: rgba(255,255,255,0.65);
+    line-height: 1.7;
+    margin-bottom: 28px;
+    max-width: 400px;
 }
-.hw-app-btns { display: flex; gap: 12px; flex-wrap: wrap; }
-.hw-app-btn {
-    display: flex;
+.hw-app-soon-badge {
+    display: inline-flex;
     align-items: center;
-    gap: 10px;
-    background: #fff;
-    border-radius: 12px;
-    padding: 10px 18px;
-    text-decoration: none;
-    transition: background 0.2s;
+    gap: 8px;
+    background: rgba(255,196,0,0.15);
+    border: 1.5px solid rgba(255,196,0,0.4);
+    color: #FFC400;
+    border-radius: 50px;
+    padding: 8px 18px;
+    font-size: 13px;
+    font-weight: 700;
+    font-family: 'Montserrat', sans-serif;
 }
-.hw-app-btn:hover { background: #F3F4F6; }
-.hw-app-btn-icon { font-size: 22px; }
-.hw-app-btn-label span { display: block; }
-.hw-app-btn-label span:first-child { font-size: 10px; color: #6B7280; font-weight: 500; }
-.hw-app-btn-label span:last-child  { font-size: 14px; color: #111; font-weight: 700; font-family: 'Montserrat',sans-serif; }
-.hw-phones {
-    display: flex;
+.hw-app-soon-phones {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
     position: relative;
     z-index: 2;
-    gap: 0;
 }
-.hw-phone {
-    width: 110px;
-    background: #1a1a2e;
-    border-radius: 22px;
-    padding: 6px;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-    border: 1.5px solid rgba(255,255,255,0.1);
-}
-.hw-phone-screen {
+.hw-app-soon-phones img {
+    width: 100%;
     border-radius: 16px;
-    height: 190px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 36px;
+    box-shadow: 0 16px 48px rgba(0,0,0,0.4);
+    display: block;
+    object-fit: cover;
+    aspect-ratio: 9/16;
 }
-.hw-phone:last-child {
-    transform: translateX(-16px) translateY(20px);
-}
+.hw-app-soon-phones img:nth-child(2) { margin-top: 28px; }
+.hw-app-soon-phones img:nth-child(3) { margin-top: -20px; }
 
 /* ── Articles section ─────────────────────────── */
 .hw-articles-section {
@@ -1175,9 +1191,9 @@ include __DIR__ . '/includes/header.php';
     .hw-carousel { grid-template-columns: repeat(2, 1fr); }
     .hw-feature-grid { grid-template-columns: 1fr; }
     .hw-feature-big { min-height: 320px; }
-    .hw-stats-grid { grid-template-columns: 1fr; }
-    .hw-app-card { grid-template-columns: 1fr; }
-    .hw-phones { display: none; }
+    .hw-stats4-grid { grid-template-columns: repeat(2, 1fr); }
+    .hw-app-soon { grid-template-columns: 1fr; padding: 40px 32px; }
+    .hw-app-soon-phones { grid-template-columns: repeat(4, 1fr); }
     .hw-articles-grid { grid-template-columns: repeat(2, 1fr); }
     .hw-tools-grid { grid-template-columns: 1fr; }
     .hw-cats-grid { grid-template-columns: repeat(2, 1fr); }
@@ -1201,8 +1217,9 @@ include __DIR__ . '/includes/header.php';
     .hw-seo-grid { grid-template-columns: 1fr 1fr; }
     .hw-testi-grid { grid-template-columns: 1fr; }
     .hw-cta-card { padding: 40px 24px; }
-    .hw-app-card { padding: 32px 24px; }
-    .hw-stat-card { padding: 28px; }
+    .hw-app-soon { padding: 32px 20px; }
+    .hw-s4-card { padding: 24px 20px; min-height: 180px; }
+    .hw-stats4-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
 }
 </style>
 
@@ -1758,72 +1775,97 @@ include __DIR__ . '/includes/header.php';
 <hr class="hw-divider">
 
 <!-- ══════════════════════════════════════════════════════
-     STATS — "Préparez-vous à décrocher votre job !"
+     STATS — 4 cartes style Hello Work
 ═══════════════════════════════════════════════════════ -->
 <div class="hw-section" style="padding-bottom:0;">
     <h2 class="hw-title">Préparez-vous à<br><strong>décrocher votre job !</strong></h2>
 
-    <div class="hw-stats-grid">
-        <!-- Stat 1 — Bleu -->
-        <div class="hw-stat-card" style="background:#0070FF;">
+    <div class="hw-stats4-grid">
+
+        <!-- Carte 1 — Lavande : nombre chauffeurs -->
+        <div class="hw-s4-card" style="background:#EEF2FF;">
             <div>
-                <div class="hw-stat-num">
+                <div class="hw-s4-num">
                     <span data-target="<?= $displayDrivers ?>"><?= $displayDrivers ?></span>
                 </div>
-                <div class="hw-stat-label">Chauffeurs inscrits<br>sur FLASH Congo</div>
+                <div class="hw-s4-desc">chauffeurs déjà inscrits sur FLASH Congo</div>
             </div>
-            <a href="/chauffeurs" class="hw-stat-btn">
+            <div style="margin-top:20px;font-size:13px;color:#4F46E5;font-weight:600;">soyez le prochain à être vu !</div>
+        </div>
+
+        <!-- Carte 2 — Bleu vif : CTA chauffeur -->
+        <div class="hw-s4-card" style="background:#0070FF;display:flex;flex-direction:column;justify-content:space-between;">
+            <div>
+                <div class="hw-s4-icon-circle">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                </div>
+                <div class="hw-s4-eyebrow" style="color:rgba(255,255,255,0.6);">Pour les chauffeurs</div>
+                <div class="hw-s4-title">SOYEZ VISIBLE AUPRÈS DES PROPRIÉTAIRES</div>
+            </div>
+            <a href="/chauffeurs" class="hw-s4-pill hw-s4-pill-white">
                 Déposer mon CV
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </a>
         </div>
-        <!-- Stat 2 — Noir -->
-        <div class="hw-stat-card" style="background:#111111;">
+
+        <!-- Carte 3 — Jaune pâle : nombre offres -->
+        <div class="hw-s4-card" style="background:#FEFCE8;">
             <div>
-                <div class="hw-stat-num">
+                <div class="hw-s4-num">
                     <span data-target="<?= $displayOffers ?>"><?= $displayOffers ?></span>
                 </div>
-                <div class="hw-stat-label">Offres actives<br>sur la plateforme</div>
+                <div class="hw-s4-desc">offres actives sur la plateforme</div>
             </div>
-            <a href="/offres" class="hw-stat-btn">
-                Voir les offres
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            <div style="margin-top:20px;font-size:13px;color:#CA8A04;font-weight:600;">on vous envoie celles qui collent ?</div>
+        </div>
+
+        <!-- Carte 4 — Jaune vif : CTA alerte -->
+        <div class="hw-s4-card" style="background:#FFC400;display:flex;flex-direction:column;justify-content:space-between;">
+            <div>
+                <div class="hw-s4-icon-circle" style="background:rgba(0,0,0,0.12);">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+                </div>
+                <div class="hw-s4-eyebrow" style="color:rgba(0,0,0,0.5);">Pour les chauffeurs</div>
+                <div class="hw-s4-title" style="color:#111;">SOYEZ ALERTÉ RAPIDEMENT</div>
+            </div>
+            <a href="/chauffeurs" class="hw-s4-pill">
+                Créer mon alerte
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </a>
         </div>
+
     </div>
 </div>
 
-<!-- App section -->
+<!-- ══════════════════════════════════════════════════════
+     APP — Bientôt disponible
+═══════════════════════════════════════════════════════ -->
 <div style="max-width:1200px;margin:20px auto 64px;padding:0 24px;">
-    <div class="hw-app-card">
+    <div class="hw-app-soon">
+        <!-- Texte gauche -->
         <div style="position:relative;z-index:2;">
-            <p class="hw-app-eyebrow">Application mobile</p>
-            <h3 class="hw-app-title">Téléchargez l'app FLASH<br>pour ne rien manquer</h3>
-            <p class="hw-app-sub">Recevez les offres en temps réel, gérez votre profil et contactez propriétaires ou chauffeurs depuis votre téléphone.</p>
-            <div class="hw-app-btns">
-                <a href="#" class="hw-app-btn">
-                    <span class="hw-app-btn-icon">🍎</span>
-                    <div class="hw-app-btn-label">
-                        <span>Disponible sur</span>
-                        <span>App Store</span>
-                    </div>
-                </a>
-                <a href="#" class="hw-app-btn">
-                    <span class="hw-app-btn-icon">🤖</span>
-                    <div class="hw-app-btn-label">
-                        <span>Disponible sur</span>
-                        <span>Google Play</span>
-                    </div>
-                </a>
+            <p class="hw-app-soon-eyebrow">Application mobile</p>
+            <h3 class="hw-app-soon-title">L'app FLASH arrive<br>très bientôt !</h3>
+            <p class="hw-app-soon-sub">Offres en temps réel, profil chauffeur, contact direct avec les propriétaires — tout depuis votre téléphone.</p>
+            <div class="hw-app-soon-badge">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                Bientôt disponible
             </div>
         </div>
-        <div class="hw-phones" style="position:relative;z-index:2;">
-            <div class="hw-phone">
-                <div class="hw-phone-screen" style="background:linear-gradient(180deg,#0070FF,#005ACC);">⚡</div>
-            </div>
-            <div class="hw-phone">
-                <div class="hw-phone-screen" style="background:linear-gradient(180deg,#008A3D,#006B2E);">🚖</div>
-            </div>
+        <!-- Photos téléphones -->
+        <div class="hw-app-soon-phones">
+            <img src="/assets/images/app-screen-1.jpg"
+                 alt="App FLASH écran 1"
+                 onerror="this.style.background='linear-gradient(180deg,#0070FF,#005ACC)';this.src='';this.alt='';this.style.minHeight='220px';">
+            <img src="/assets/images/app-screen-2.jpg"
+                 alt="App FLASH écran 2"
+                 onerror="this.style.background='linear-gradient(180deg,#008A3D,#006B2E)';this.src='';this.alt='';this.style.minHeight='220px';">
+            <img src="/assets/images/app-screen-3.jpg"
+                 alt="App FLASH écran 3"
+                 onerror="this.style.background='linear-gradient(180deg,#FFC400,#FF9900)';this.src='';this.alt='';this.style.minHeight='220px';">
+            <img src="/assets/images/app-screen-4.jpg"
+                 alt="App FLASH écran 4"
+                 onerror="this.style.background='linear-gradient(180deg,#111,#333)';this.src='';this.alt='';this.style.minHeight='220px';">
         </div>
     </div>
 </div>
