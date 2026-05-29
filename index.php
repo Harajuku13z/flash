@@ -2069,30 +2069,6 @@ include __DIR__ . '/includes/header.php';
 </div>
 
 <!-- ══════════════════════════════════════════════════════
-     LIENS SEO
-═══════════════════════════════════════════════════════ -->
-<section class="hw-seo-section">
-    <div style="max-width:1200px;margin:0 auto;padding:0 24px;">
-        <div class="hw-seo-grid">
-            <?php
-            $seoBlocks = [
-                ['Toutes les offres chauffeur', ['Chauffeur taxi Brazzaville','Chauffeur taxi Pointe-Noire','Chauffeur temps plein Congo','Chauffeur temps partiel Congo','Offres urgent chauffeur','Taxi vert-blanc Brazzaville','Taxi bleu-blanc Pointe-Noire']],
-                ['Toutes les offres d\'alternance', ['Chauffeur débutant Congo','Taxi avec véhicule fourni','Chauffeur sans expérience','Formation chauffeur taxi','Stage taxi Brazzaville','Apprenti conducteur Congo']],
-                ['Toutes les offres intérim', ['Chauffeur intérim Brazzaville','Chauffeur ponctuel Congo','Mission taxi courte durée','Remplacement chauffeur','Intérim taxi Pointe-Noire','Chauffeur weekend Congo']],
-            ];
-            foreach ($seoBlocks as $block): ?>
-            <div>
-                <p class="hw-seo-label"><?= $block[0] ?></p>
-                <?php foreach ($block[1] as $lnk): ?>
-                <a href="/offres?q=<?= urlencode($lnk) ?>" class="hw-seo-link"><?= $lnk ?></a>
-                <?php endforeach; ?>
-            </div>
-            <?php endforeach; ?>
-        </div>
-    </div>
-</section>
-
-<!-- ══════════════════════════════════════════════════════
      CTA FINAL
 ═══════════════════════════════════════════════════════ -->
 <section class="hw-cta-section">
