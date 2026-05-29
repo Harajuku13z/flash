@@ -1281,7 +1281,7 @@ include __DIR__ . '/includes/header.php';
     .hw-seo-grid { grid-template-columns: 1fr 1fr; }
     .hw-testi-grid { grid-template-columns: 1fr; }
     .hw-cta-card { padding: 40px 24px; }
-    .hw-app-section { padding: 0 0 48px; gap: 0; }
+    .hw-app-section { padding: 32px 0 48px; gap: 0; }
     .hw-app-phones-wrap { min-height: 360px; padding: 0; border-radius: 24px; width: calc(100vw - 32px); margin-left: calc(-50vw + 50% + 16px); }
     .hw-app-text { padding: 28px 24px 0; }
     .hw-app-text-title { font-size: 26px; margin-bottom: 12px; }
