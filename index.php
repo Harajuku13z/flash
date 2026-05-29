@@ -1556,42 +1556,43 @@ include __DIR__ . '/includes/header.php';
     <div class="hw-carousel-wrap">
         <div class="hw-carousel" id="ownersCarousel">
             <?php
+            // Résolution auto de l'extension pour chaque card
+            function ownerImg($base) {
+                foreach(['jpg','jpeg','png','webp'] as $e)
+                    if(file_exists(__DIR__.'/assets/images/'.$base.'.'.$e))
+                        return '/assets/images/'.$base.'.'.$e;
+                return '/assets/images/'.$base.'.jpg';
+            }
             $ownerCards = [
                 [
                     'name'  => 'M. Moukassa – Brazzaville',
                     'jobs'  => '3 offres actives',
-                    'img'   => '/assets/images/taxi-card-1.jpg',
+                    'img'   => ownerImg('taxi-card-1'),
                     'ville' => 'Brazzaville',
                 ],
                 [
                     'name'  => 'Mme Bouanga – Pointe-Noire',
                     'jobs'  => '2 offres actives',
-                    'img'   => '/assets/images/taxi-card-2.jpg',
+                    'img'   => ownerImg('taxi-card-2'),
                     'ville' => 'Pointe-Noire',
                 ],
                 [
                     'name'  => 'M. Nganga – Dolisie',
                     'jobs'  => '1 offre active',
-                    'img'   => '/assets/images/taxi-card-3.jpg',
+                    'img'   => ownerImg('taxi-card-3'),
                     'ville' => 'Dolisie',
                 ],
                 [
                     'name'  => 'Taxi Élite – Brazzaville',
                     'jobs'  => '4 offres actives',
-                    'img'   => '/assets/images/taxi-card-4.jpg',
+                    'img'   => ownerImg('taxi-card-4'),
                     'ville' => 'Brazzaville',
                 ],
                 [
                     'name'  => 'Rapid Auto – Nkayi',
                     'jobs'  => '2 offres actives',
-                    'img'   => '/assets/images/taxi-card-1.jpg',
+                    'img'   => ownerImg('taxi-card-5'),
                     'ville' => 'Nkayi',
-                ],
-                [
-                    'name'  => 'Congo Taxi Pro – PNR',
-                    'jobs'  => '5 offres actives',
-                    'img'   => '/assets/images/taxi-card-2.jpg',
-                    'ville' => 'Pointe-Noire',
                 ],
             ];
             foreach (array_slice($ownerCards, 0, 3) as $o): ?>
