@@ -639,34 +639,24 @@ include __DIR__ . '/includes/header.php';
 .hw-app-phones-wrap {
     background: #EEF2FF;
     border-radius: 28px;
-    padding: 48px 40px 0;
+    padding: 40px 32px 0;
     position: relative;
     overflow: hidden;
-    min-height: 400px;
+    min-height: 420px;
     display: flex;
     align-items: flex-end;
     justify-content: center;
-    gap: -20px;
 }
 .hw-app-phone-img {
-    width: 46%;
-    max-width: 200px;
-    border-radius: 24px;
-    box-shadow: 0 24px 60px rgba(0,0,0,0.22);
+    width: 72%;
+    max-width: 340px;
+    border-radius: 0;
     display: block;
-    object-fit: cover;
-    object-position: top;
-    flex-shrink: 0;
+    object-fit: contain;
+    object-position: bottom center;
     position: relative;
-}
-.hw-app-phone-img:first-child {
-    margin-bottom: 40px;
     z-index: 2;
-    transform: rotate(-4deg) translateX(16px);
-}
-.hw-app-phone-img:last-child {
-    z-index: 3;
-    transform: rotate(3deg) translateX(-12px);
+    filter: drop-shadow(0 20px 48px rgba(0,0,112,0.18));
 }
 .hw-app-text {}
 .hw-app-text-title {
@@ -1907,15 +1897,11 @@ include __DIR__ . '/includes/header.php';
 ═══════════════════════════════════════════════════════ -->
 <div class="hw-app-section">
 
-    <!-- Gauche : fond lavande + 2 téléphones qui se chevauchent -->
+    <!-- Gauche : fond lavande + photo téléphone FLASH -->
     <div class="hw-app-phones-wrap">
         <img src="/assets/images/app-screen-1.jpg"
              class="hw-app-phone-img"
-             alt="App FLASH écran accueil"
-             onerror="this.style.display='none'">
-        <img src="/assets/images/app-screen-2.jpg"
-             class="hw-app-phone-img"
-             alt="App FLASH écran carte"
+             alt="App FLASH — main tenant le téléphone"
              onerror="this.style.display='none'">
     </div>
 
