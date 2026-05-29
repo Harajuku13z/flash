@@ -636,35 +636,31 @@ include __DIR__ . '/includes/header.php';
 
 /* ── App section style Hello Work ─────────────── */
 .hw-app-section {
-    max-width: 1280px;
+    max-width: 1200px;
     margin: 0 auto;
-    padding: 72px 32px;
+    padding: 48px 24px 72px;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 80px;
+    gap: 56px;
     align-items: center;
 }
 .hw-app-phones-wrap {
     background: #EEF2FF;
     border-radius: 28px;
-    padding: 40px 32px 0;
-    position: relative;
     overflow: hidden;
-    min-height: 420px;
+    height: 460px;
+    position: relative;
     display: flex;
     align-items: flex-end;
     justify-content: center;
+    padding: 0;
 }
 .hw-app-phone-img {
-    width: 72%;
-    max-width: 340px;
-    border-radius: 0;
+    width: 100%;
+    height: 100%;
     display: block;
-    object-fit: contain;
-    object-position: bottom center;
-    position: relative;
-    z-index: 2;
-    filter: drop-shadow(0 20px 48px rgba(0,0,112,0.18));
+    object-fit: cover;
+    object-position: center top;
 }
 .hw-app-text {}
 .hw-app-text-title {
