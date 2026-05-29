@@ -626,81 +626,88 @@ include __DIR__ . '/includes/header.php';
 }
 .hw-s4-pill-white:hover { background: #F3F4F6; }
 
-/* ── App section "bientôt disponible" ─────────── */
-.hw-app-soon {
-    border-radius: 24px;
-    background: linear-gradient(110deg, #0d1b3e 0%, #0a2255 100%);
-    padding: 56px 60px;
+/* ── App section style Hello Work ─────────────── */
+.hw-app-section {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 72px 32px;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 48px;
+    gap: 80px;
     align-items: center;
+}
+.hw-app-phones-wrap {
+    background: #EEF2FF;
+    border-radius: 28px;
+    padding: 48px 40px 0;
+    position: relative;
     overflow: hidden;
-    position: relative;
+    min-height: 400px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: -20px;
 }
-.hw-app-soon::before {
-    content: '';
-    position: absolute;
-    right: -80px; bottom: -80px;
-    width: 360px; height: 360px;
-    border-radius: 50%;
-    background: rgba(0,112,255,0.12);
-    pointer-events: none;
-}
-.hw-app-soon-eyebrow {
-    font-size: 11px;
-    font-weight: 800;
-    color: #FFC400;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    margin-bottom: 14px;
-    font-family: 'Montserrat', sans-serif;
-}
-.hw-app-soon-title {
-    font-family: 'Montserrat', sans-serif;
-    font-size: clamp(22px, 2.5vw, 30px);
-    font-weight: 900;
-    color: #fff;
-    line-height: 1.2;
-    margin-bottom: 14px;
-}
-.hw-app-soon-sub {
-    font-size: 14px;
-    color: rgba(255,255,255,0.65);
-    line-height: 1.7;
-    margin-bottom: 28px;
-    max-width: 400px;
-}
-.hw-app-soon-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: rgba(255,196,0,0.15);
-    border: 1.5px solid rgba(255,196,0,0.4);
-    color: #FFC400;
-    border-radius: 50px;
-    padding: 8px 18px;
-    font-size: 13px;
-    font-weight: 700;
-    font-family: 'Montserrat', sans-serif;
-}
-.hw-app-soon-phones {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 14px;
-    position: relative;
-    z-index: 2;
-}
-.hw-app-soon-phones img {
-    width: 100%;
-    border-radius: 16px;
-    box-shadow: 0 16px 48px rgba(0,0,0,0.4);
+.hw-app-phone-img {
+    width: 46%;
+    max-width: 200px;
+    border-radius: 24px;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.22);
     display: block;
     object-fit: cover;
-    aspect-ratio: 9/16;
+    object-position: top;
+    flex-shrink: 0;
+    position: relative;
 }
-.hw-app-soon-phones img:nth-child(2) { margin-top: 28px; }
-.hw-app-soon-phones img:nth-child(3) { margin-top: -20px; }
+.hw-app-phone-img:first-child {
+    margin-bottom: 40px;
+    z-index: 2;
+    transform: rotate(-4deg) translateX(16px);
+}
+.hw-app-phone-img:last-child {
+    z-index: 3;
+    transform: rotate(3deg) translateX(-12px);
+}
+.hw-app-text {}
+.hw-app-text-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: clamp(28px, 3vw, 40px);
+    font-weight: 900;
+    color: #111;
+    line-height: 1.15;
+    margin-bottom: 18px;
+}
+.hw-app-text-title span { font-weight: 400; display: block; }
+.hw-app-text-sub {
+    font-size: 15px;
+    color: #6B7280;
+    line-height: 1.7;
+    margin-bottom: 32px;
+    max-width: 420px;
+}
+.hw-app-text-sub a { color: #111; font-weight: 600; }
+.hw-app-btns-row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+.hw-app-store-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: #111;
+    color: #fff;
+    border-radius: 50px;
+    padding: 14px 28px;
+    font-size: 15px;
+    font-weight: 700;
+    text-decoration: none;
+    font-family: 'Montserrat', sans-serif;
+    transition: background 0.2s, transform 0.15s;
+    white-space: nowrap;
+}
+.hw-app-store-btn:hover { background: #333; transform: translateY(-1px); }
+.hw-app-store-btn svg { flex-shrink: 0; }
 
 /* ── Articles section ─────────────────────────── */
 .hw-articles-section {
@@ -1247,8 +1254,8 @@ include __DIR__ . '/includes/header.php';
     .hw-feature-grid { grid-template-columns: 1fr; }
     .hw-feature-big { min-height: 320px; }
     .hw-stats4-grid { grid-template-columns: repeat(2, 1fr); }
-    .hw-app-soon { grid-template-columns: 1fr; padding: 40px 32px; }
-    .hw-app-soon-phones { grid-template-columns: repeat(4, 1fr); }
+    .hw-app-section { grid-template-columns: 1fr; gap: 40px; padding: 48px 24px; }
+    .hw-app-phones-wrap { min-height: 300px; }
     .hw-articles-grid { grid-template-columns: repeat(2, 1fr); }
     .hw-tools-grid { grid-template-columns: 1fr; }
     .hw-tool-card { padding: 32px 28px 0; }
@@ -1273,7 +1280,9 @@ include __DIR__ . '/includes/header.php';
     .hw-seo-grid { grid-template-columns: 1fr 1fr; }
     .hw-testi-grid { grid-template-columns: 1fr; }
     .hw-cta-card { padding: 40px 24px; }
-    .hw-app-soon { padding: 32px 20px; }
+    .hw-app-section { padding: 32px 16px; gap: 28px; }
+    .hw-app-phones-wrap { min-height: 240px; padding: 32px 24px 0; }
+    .hw-app-btns-row { flex-direction: column; }
     .hw-s4-card { padding: 24px 20px; min-height: 180px; }
     .hw-stats4-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
 }
@@ -1894,36 +1903,43 @@ include __DIR__ . '/includes/header.php';
 </div>
 
 <!-- ══════════════════════════════════════════════════════
-     APP — Bientôt disponible
+     APP — Style Hello Work : phones gauche, texte droite
 ═══════════════════════════════════════════════════════ -->
-<div style="max-width:1200px;margin:20px auto 64px;padding:0 24px;">
-    <div class="hw-app-soon">
-        <!-- Texte gauche -->
-        <div style="position:relative;z-index:2;">
-            <p class="hw-app-soon-eyebrow">Application mobile</p>
-            <h3 class="hw-app-soon-title">L'app FLASH arrive<br>très bientôt !</h3>
-            <p class="hw-app-soon-sub">Offres en temps réel, profil chauffeur, contact direct avec les propriétaires — tout depuis votre téléphone.</p>
-            <div class="hw-app-soon-badge">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                Bientôt disponible
-            </div>
-        </div>
-        <!-- Photos téléphones -->
-        <div class="hw-app-soon-phones">
-            <img src="/assets/images/app-screen-1.jpg"
-                 alt="App FLASH écran 1"
-                 onerror="this.style.background='linear-gradient(180deg,#0070FF,#005ACC)';this.src='';this.alt='';this.style.minHeight='220px';">
-            <img src="/assets/images/app-screen-2.jpg"
-                 alt="App FLASH écran 2"
-                 onerror="this.style.background='linear-gradient(180deg,#008A3D,#006B2E)';this.src='';this.alt='';this.style.minHeight='220px';">
-            <img src="/assets/images/app-screen-3.jpg"
-                 alt="App FLASH écran 3"
-                 onerror="this.style.background='linear-gradient(180deg,#FFC400,#FF9900)';this.src='';this.alt='';this.style.minHeight='220px';">
-            <img src="/assets/images/app-screen-4.jpg"
-                 alt="App FLASH écran 4"
-                 onerror="this.style.background='linear-gradient(180deg,#111,#333)';this.src='';this.alt='';this.style.minHeight='220px';">
+<div class="hw-app-section">
+
+    <!-- Gauche : fond lavande + 2 téléphones qui se chevauchent -->
+    <div class="hw-app-phones-wrap">
+        <img src="/assets/images/app-screen-1.jpg"
+             class="hw-app-phone-img"
+             alt="App FLASH écran accueil"
+             onerror="this.style.display='none'">
+        <img src="/assets/images/app-screen-2.jpg"
+             class="hw-app-phone-img"
+             alt="App FLASH écran carte"
+             onerror="this.style.display='none'">
+    </div>
+
+    <!-- Droite : texte + boutons noirs -->
+    <div class="hw-app-text">
+        <h2 class="hw-app-text-title">
+            <span>Téléchargez l'app</span>
+            <strong>pour ne rien manquer</strong>
+        </h2>
+        <p class="hw-app-text-sub">
+            Recevez les offres en temps réel, gérez votre profil et contactez propriétaires ou chauffeurs directement <a href="#">avec l'app</a>.
+        </p>
+        <div class="hw-app-btns-row">
+            <a href="#" class="hw-app-store-btn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M3.18 23.76c.33.18.72.18 1.05 0l10.5-6.06L12 15l-8.82 8.76zM.09 1.56C.03 1.8 0 2.07 0 2.37v19.26c0 .3.03.57.09.81L12 12 .09 1.56zM23.91 10.68l-2.79-1.62L18 12l3.12 2.94 2.79-1.62c.78-.48.78-1.68 0-2.64zM4.23.24C3.9.06 3.51.06 3.18.24L12 9l2.73-2.7L4.23.24z"/></svg>
+                Google Play
+            </a>
+            <a href="#" class="hw-app-store-btn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+                App Store
+            </a>
         </div>
     </div>
+
 </div>
 
 <hr class="hw-divider">
