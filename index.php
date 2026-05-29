@@ -1905,39 +1905,6 @@ include __DIR__ . '/includes/header.php';
 </section>
 
 <hr class="hw-divider">
-
-<!-- ══════════════════════════════════════════════════════
-     PANORAMAS — 4 cartes photo 2×2
-═══════════════════════════════════════════════════════ -->
-<div class="hw-section">
-    <h2 class="hw-title">Explorez nos panoramas<br><strong style="font-size:clamp(18px,2vw,26px);font-weight:400;color:#6B7280;">pour éclairer vos choix professionnels</strong></h2>
-    <div class="hw-panos-grid">
-        <?php
-        $panos = [
-            ['Le grand panorama<br>des métiers',    'Découvrez tous les aspects du taxi au Congo', '/assets/images/taxi-card-1.jpg', 'Découvrir les métiers'],
-            ['Le grand panorama<br>des salaires',   'Recettes et revenus moyens selon la ville',   '/assets/images/taxi-card-2.jpg', 'Découvrir les salaires'],
-            ['Le grand panorama<br>des compétences','Ce que cherchent vraiment les propriétaires', '/assets/images/taxi-hero.png',   'Découvrir les compétences'],
-            ['Le grand panorama<br>des formations', 'Se former pour mieux conduire et gagner plus', '/assets/images/taxi-card-3.jpg','Découvrir les formations'],
-        ];
-        foreach ($panos as $p): ?>
-        <a href="/conseils" class="hw-pano-card">
-            <img src="<?= $p[2] ?>" alt="<?= strip_tags($p[0]) ?>" class="hw-pano-img"
-                 onerror="this.style.display='none'">
-            <div class="hw-pano-overlay"></div>
-            <div class="hw-pano-body">
-                <div>
-                    <div class="hw-pano-title"><?= $p[0] ?></div>
-                    <div class="hw-pano-sub"><?= $p[1] ?></div>
-                </div>
-                <div class="hw-pano-cta"><?= $p[3] ?> →</div>
-            </div>
-        </a>
-        <?php endforeach; ?>
-    </div>
-</div>
-
-<hr class="hw-divider">
-
 <!-- ══════════════════════════════════════════════════════
      VILLES — Grande Brazzaville + 4 petites (photos)
 ═══════════════════════════════════════════════════════ -->
