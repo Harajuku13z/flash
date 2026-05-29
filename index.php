@@ -148,30 +148,36 @@ include __DIR__ . '/includes/header.php';
     margin: 16px auto 0;
     padding: 0 24px;
     display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
+    gap: 8px;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
 }
+.hw-pills::-webkit-scrollbar { display: none; }
 .hw-pill {
     display: inline-flex;
     align-items: center;
-    gap: 7px;
-    padding: 9px 18px;
+    gap: 5px;
+    padding: 7px 14px;
     border: 1.5px solid #E5E7EB;
     border-radius: 50px;
     background: #fff;
     font-family: 'Inter', sans-serif;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 500;
     color: #111;
     text-decoration: none;
     cursor: pointer;
     transition: all 0.2s;
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 .hw-pill:hover {
     border-color: #111;
     background: #F9FAFB;
 }
-.hw-pill-icon { font-size: 15px; }
+.hw-pill-icon { font-size: 14px; }
 
 /* ── Banner IA ────────────────────────────────── */
 .hw-banner {
@@ -659,8 +665,9 @@ include __DIR__ . '/includes/header.php';
     width: 100%;
     height: 100%;
     display: block;
-    object-fit: cover;
-    object-position: center top;
+    object-fit: contain;
+    object-position: center center;
+    padding: 24px;
 }
 .hw-app-text {}
 .hw-app-text-title {
