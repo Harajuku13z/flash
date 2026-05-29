@@ -1283,6 +1283,300 @@ include __DIR__ . '/includes/header.php';
 <hr class="hw-divider">
 
 <!-- ══════════════════════════════════════════════════════
+     SIMPLE COMME FLASH — 3 sections alternées style Hello Work
+     Image illustrée gauche/droite + texte avec icône + CTA
+═══════════════════════════════════════════════════════ -->
+<style>
+/* ── Sections alternées ────────────────────────── */
+.hw-alt-section { padding: 80px 0; }
+.hw-alt-section + .hw-alt-section { padding-top: 0; }
+.hw-alt-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+.hw-alt-grid.reverse { direction: rtl; }
+.hw-alt-grid.reverse > * { direction: ltr; }
+
+/* Card illustrée */
+.hw-alt-card {
+    border-radius: 24px;
+    overflow: hidden;
+    position: relative;
+    min-height: 340px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.hw-alt-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 340px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px;
+}
+/* Photo taxi dans la card */
+.hw-alt-photo {
+    width: 75%;
+    max-width: 280px;
+    border-radius: 16px;
+    box-shadow: 0 16px 48px rgba(0,0,0,0.2);
+    display: block;
+    object-fit: cover;
+    aspect-ratio: 4/3;
+    position: relative;
+    z-index: 2;
+}
+/* Badges flottants style Hello Work */
+.hw-alt-badge {
+    position: absolute;
+    background: #fff;
+    border-radius: 50px;
+    padding: 8px 16px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: #111;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+}
+.hw-alt-badge-sm {
+    position: absolute;
+    background: #fff;
+    border-radius: 12px;
+    padding: 10px 14px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    color: #111;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    z-index: 3;
+    min-width: 160px;
+}
+.hw-alt-badge-sm .badge-title {
+    font-size: 13px;
+    font-weight: 800;
+    color: #111;
+    margin-bottom: 8px;
+}
+.hw-alt-badge-sm .badge-step {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    color: #9CA3AF;
+    margin-bottom: 4px;
+}
+.hw-alt-badge-sm .badge-step.active { color: #0070FF; font-weight: 700; }
+.hw-alt-badge-sm .badge-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #E5E7EB;
+    flex-shrink: 0;
+}
+.hw-alt-badge-sm .badge-dot.active { background: #0070FF; }
+
+/* Icône cercle coloré */
+.hw-alt-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    margin-bottom: 20px;
+    flex-shrink: 0;
+}
+/* Texte côté */
+.hw-alt-text {}
+.hw-alt-text h2 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: clamp(24px, 3vw, 36px);
+    font-weight: 400;
+    color: #111;
+    line-height: 1.2;
+    margin-bottom: 16px;
+}
+.hw-alt-text h2 strong { font-weight: 800; }
+.hw-alt-text p {
+    font-size: 15px;
+    color: #6B7280;
+    line-height: 1.65;
+    margin-bottom: 24px;
+}
+.hw-alt-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 1.5px solid #D1D5DB;
+    border-radius: 50px;
+    padding: 11px 24px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #111;
+    text-decoration: none;
+    transition: all 0.2s;
+    background: #fff;
+}
+.hw-alt-cta:hover {
+    border-color: #111;
+    background: #F9FAFB;
+}
+
+/* Section titre principal */
+.hw-simple-title {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 72px 24px 48px;
+}
+.hw-simple-title h2 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: clamp(28px, 4vw, 46px);
+    font-weight: 400;
+    color: #111;
+    line-height: 1.15;
+}
+.hw-simple-title h2 strong { font-weight: 800; display: block; }
+
+/* Responsive */
+@media (max-width: 900px) {
+    .hw-alt-grid { grid-template-columns: 1fr; gap: 32px; }
+    .hw-alt-grid.reverse { direction: ltr; }
+    .hw-alt-card { min-height: 260px; }
+    .hw-alt-card-inner { min-height: 260px; }
+}
+</style>
+
+<!-- Titre de la section -->
+<div class="hw-simple-title">
+    <h2>Trouver un chauffeur ?<br><strong>Simple comme FLASH</strong></h2>
+</div>
+
+<!-- ── SECTION 1 — Image gauche + texte droite ── -->
+<div class="hw-alt-section">
+    <div class="hw-alt-grid">
+
+        <!-- Card illustrée gauche — fond violet -->
+        <div class="hw-alt-card" style="background:#EEF2FF;">
+            <div class="hw-alt-card-inner">
+                <!-- Badge candidature (style Hello Work) -->
+                <div class="hw-alt-badge-sm" style="bottom:40px;left:32px;z-index:3;">
+                    <div class="badge-title">Taxi vert-blanc<br>Brazzaville</div>
+                    <div class="badge-step"><div class="badge-dot"></div>Offre publiée</div>
+                    <div class="badge-step"><div class="badge-dot"></div>CV reçu</div>
+                    <div class="badge-step active"><div class="badge-dot active"></div><strong>Candidature étudiée</strong></div>
+                    <div class="badge-step"><div class="badge-dot"></div>Candidature acceptée</div>
+                </div>
+                <!-- Photo taxi -->
+                <img src="/assets/images/taxi-card-2.jpg"
+                     alt="Chauffeur taxi Congo"
+                     class="hw-alt-photo"
+                     style="margin-left:auto;"
+                     onerror="this.style.display='none'">
+                <!-- Fallback si pas de photo -->
+                <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:flex-end;padding-right:32px;font-size:100px;opacity:0.12;z-index:1;">🚗</div>
+            </div>
+        </div>
+
+        <!-- Texte droite -->
+        <div class="hw-alt-text">
+            <div class="hw-alt-icon" style="background:#EEF2FF;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6366F1" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+            </div>
+            <h2>Suivez votre<br><strong>candidature</strong></h2>
+            <p>Déposez votre profil en 5 minutes et soyez contacté directement par les propriétaires qui recrutent. Dès qu'un propriétaire consulte votre CV, vous êtes prévenu.</p>
+            <a href="/chauffeurs" class="hw-alt-cta">Déposer mon CV</a>
+        </div>
+    </div>
+</div>
+
+<!-- ── SECTION 2 — Texte gauche + Image droite ── -->
+<div class="hw-alt-section">
+    <div class="hw-alt-grid reverse">
+
+        <!-- Card illustrée droite — fond bleu clair -->
+        <div class="hw-alt-card" style="background:#EFF6FF;">
+            <div class="hw-alt-card-inner">
+                <!-- Badge recette flottant haut droite -->
+                <div class="hw-alt-badge" style="top:28px;right:24px;">
+                    💰 15 000 FCFA / jour
+                </div>
+                <!-- Photo taxi -->
+                <img src="/assets/images/taxi-card-3.jpg"
+                     alt="Offre taxi transparente"
+                     class="hw-alt-photo"
+                     onerror="this.style.display='none'">
+                <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:100px;opacity:0.12;z-index:1;">🚕</div>
+                <!-- Badges bas -->
+                <div style="position:absolute;bottom:28px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:3;">
+                    <div class="hw-alt-badge" style="position:static;font-size:12px;padding:6px 12px;">🕐 Temps plein</div>
+                    <div class="hw-alt-badge" style="position:static;font-size:12px;padding:6px 12px;">❄️ Climatisé</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Texte gauche -->
+        <div class="hw-alt-text">
+            <div class="hw-alt-icon" style="background:#EFF6FF;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M9 9h6M9 12h6M9 15h4"/></svg>
+            </div>
+            <h2>Des offres qui<br><strong>ne cachent rien</strong></h2>
+            <p>Recette journalière, horaires, type de taxi, quartiers desservis… N'avancez plus dans l'inconnu. Sur FLASH, chaque offre affiche tout clairement avant que vous postuliez.</p>
+            <a href="/offres" class="hw-alt-cta">Voir les offres</a>
+        </div>
+    </div>
+</div>
+
+<!-- ── SECTION 3 — Image gauche + texte droite ── -->
+<div class="hw-alt-section" style="padding-bottom:80px;">
+    <div class="hw-alt-grid">
+
+        <!-- Card illustrée gauche — fond vert menthe -->
+        <div class="hw-alt-card" style="background:#F0FDF4;">
+            <div class="hw-alt-card-inner">
+                <!-- Badge "Super propriétaire" bas gauche -->
+                <div class="hw-alt-badge" style="bottom:32px;left:28px;background:#008A3D;color:#fff;font-size:13px;">
+                    ✅ Super propriétaire
+                </div>
+                <!-- Photo taxi -->
+                <img src="/assets/images/taxi-hero.png"
+                     alt="Propriétaire sérieux"
+                     class="hw-alt-photo"
+                     style="margin-left:auto;"
+                     onerror="this.style.display='none'">
+                <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:flex-end;padding-right:32px;font-size:100px;opacity:0.12;z-index:1;">🤝</div>
+            </div>
+        </div>
+
+        <!-- Texte droite -->
+        <div class="hw-alt-text">
+            <div class="hw-alt-icon" style="background:#F0FDF4;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <h2>Des propriétaires<br><strong>transparents</strong></h2>
+            <p>Conditions de travail, délai de réponse, réputation… FLASH sélectionne uniquement des propriétaires sérieux. Vous méritez de vraies réponses, pas de perdre votre temps.</p>
+            <a href="/proprietaires" class="hw-alt-cta">Voir les propriétaires</a>
+        </div>
+    </div>
+</div>
+
+<hr class="hw-divider">
+
+<!-- ══════════════════════════════════════════════════════
      DES PROPRIÉTAIRES QUI RECRUTENT — Carousel cards
      Exactement comme "Des entreprises qui recrutent"
 ═══════════════════════════════════════════════════════ -->
