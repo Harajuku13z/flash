@@ -147,9 +147,19 @@
         <div class="hw-footer-top">
 
             <div class="hw-footer-brand">
-                <div class="hw-footer-logo">
-                    <span>⚡</span> FLASH
-                </div>
+                <?php $footerLogo = null;
+                foreach(['png','jpg','jpeg','webp','svg'] as $e)
+                    if(file_exists(__DIR__.'/../assets/images/logo-flash.'.$e))
+                        { $footerLogo = '/assets/images/logo-flash.'.$e; break; }
+                ?>
+                <?php if($footerLogo): ?>
+                <a href="/" style="display:inline-block;margin-bottom:12px;">
+                    <img src="<?= $footerLogo ?>" alt="FLASH Transport Urbain"
+                         style="height:52px;width:auto;max-width:180px;object-fit:contain;filter:brightness(0) invert(1);">
+                </a>
+                <?php else: ?>
+                <div class="hw-footer-logo"><span>⚡</span> FLASH</div>
+                <?php endif; ?>
                 <div class="hw-footer-tagline">Transport Urbain · Congo</div>
                 <p class="hw-footer-desc">FLASH connecte les propriétaires de taxis et les chauffeurs au Congo pour développer le business taxi.</p>
                 <div class="hw-footer-socials">
