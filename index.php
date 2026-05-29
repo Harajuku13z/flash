@@ -1281,9 +1281,13 @@ include __DIR__ . '/includes/header.php';
     .hw-seo-grid { grid-template-columns: 1fr 1fr; }
     .hw-testi-grid { grid-template-columns: 1fr; }
     .hw-cta-card { padding: 40px 24px; }
-    .hw-app-section { padding: 32px 0; gap: 0; }
-    .hw-app-phones-wrap { min-height: 320px; padding: 0; border-radius: 0; width: 100vw; margin-left: calc(-50vw + 50%); }
-    .hw-app-btns-row { flex-direction: column; }
+    .hw-app-section { padding: 0 0 48px; gap: 0; }
+    .hw-app-phones-wrap { min-height: 360px; padding: 0; border-radius: 0; width: 100vw; margin-left: calc(-50vw + 50%); }
+    .hw-app-text { padding: 28px 24px 0; }
+    .hw-app-text-title { font-size: 26px; margin-bottom: 12px; }
+    .hw-app-text-sub { font-size: 14px; margin-bottom: 24px; }
+    .hw-app-btns-row { flex-direction: row; gap: 10px; }
+    .hw-app-store-btn { flex: 1; justify-content: center; padding: 13px 16px; font-size: 13px; border-radius: 14px; }
     .hw-s4-card { padding: 24px 20px; min-height: 180px; }
     .hw-stats4-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
 }
