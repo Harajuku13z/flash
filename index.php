@@ -1,4 +1,12 @@
 <?php
+function imgPath($base) {
+    foreach(['jpg','jpeg','png','webp','gif','svg'] as $ext) {
+        if(file_exists(__DIR__.'/assets/images/'.$base.'.'.$ext))
+            return '/assets/images/'.$base.'.'.$ext;
+    }
+    return null;
+}
+
 require_once __DIR__ . '/includes/db.php';
 $pdo = getDB();
 $offers   = [];
@@ -1786,10 +1794,9 @@ include __DIR__ . '/includes/header.php';
 
     <!-- Gauche : fond lavande + photo téléphone FLASH -->
     <div class="hw-app-phones-wrap">
-        <img src="/assets/images/app-screen-1.jpg"
-             class="hw-app-phone-img"
-             alt="App FLASH — main tenant le téléphone"
-             onerror="this.style.display='none'">
+        <?php if($img = imgPath('app-screen-1')): ?>
+        <img src="<?= $img ?>" class="hw-app-phone-img" alt="App FLASH">
+        <?php endif; ?>
     </div>
 
     <!-- Droite : texte + boutons noirs -->
