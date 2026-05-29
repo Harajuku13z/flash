@@ -31,12 +31,12 @@ if ($pdo) {
 // Fallback static offers
 if (empty($offers)) {
     $offers = [
-        ['id'=>1,'title'=>'Chauffeur taxi – Brazzaville centre','city'=>'Brazzaville','taxi_type'=>'Berline','availability'=>'Temps plein','is_urgent'=>1,'conditions'=>'Partage 60/40, véhicule récent Toyota Corolla. Permis B exigé, 2 ans min.','required_experience'=>'2 ans min.','img_index'=>1],
-        ['id'=>2,'title'=>'Co-gérant taxi – Pointe-Noire','city'=>'Pointe-Noire','taxi_type'=>'SUV','availability'=>'Temps plein','is_urgent'=>0,'conditions'=>'Contrat co-gérance, bonne connaissance de Pointe-Noire requise.','required_experience'=>'3 ans min.','img_index'=>2],
-        ['id'=>3,'title'=>'Chauffeur disponible immédiatement','city'=>'Brazzaville','taxi_type'=>'Berline','availability'=>'Disponible immédiatement','is_urgent'=>1,'conditions'=>'Remplacement urgent, démarrage immédiat. Expérience taxi appréciée.','required_experience'=>'1 an min.','img_index'=>3],
-        ['id'=>4,'title'=>'Taxi partagé – Dolisie','city'=>'Dolisie','taxi_type'=>'Minibus','availability'=>'Temps partiel','is_urgent'=>0,'conditions'=>'Trajet Dolisie–Brazzaville, 3 jours/semaine. Véhicule fourni.','required_experience'=>'1 an min.','img_index'=>4],
-        ['id'=>5,'title'=>'Chauffeur VTC premium – Brazzaville','city'=>'Brazzaville','taxi_type'=>'SUV','availability'=>'Temps plein','is_urgent'=>0,'conditions'=>'Clientèle entreprises, tenue professionnelle exigée. Bonus mensuel.','required_experience'=>'5 ans min.','img_index'=>5],
-        ['id'=>6,'title'=>'Chauffeur taxi – Nkayi','city'=>'Nkayi','taxi_type'=>'Berline','availability'=>'Temps plein','is_urgent'=>0,'conditions'=>'Secteur Nkayi, bonne connaissance locale. Partage 55/45.','required_experience'=>'2 ans min.','img_index'=>1],
+        ['id'=>1,'title'=>'Chauffeur taxi – Brazzaville centre','city'=>'Brazzaville','taxi_type'=>'Berline','availability'=>'Temps plein','is_urgent'=>1,'conditions'=>'Partage 60/40, véhicule récent Toyota Corolla. Permis B exigé, 2 ans min.','required_experience'=>'2 ans min.','img_index'=>1,'created_at'=>date('Y-m-d H:i:s', strtotime('-1 day'))],
+        ['id'=>2,'title'=>'Co-gérant taxi – Pointe-Noire','city'=>'Pointe-Noire','taxi_type'=>'SUV','availability'=>'Temps plein','is_urgent'=>0,'conditions'=>'Contrat co-gérance, bonne connaissance de Pointe-Noire requise.','required_experience'=>'3 ans min.','img_index'=>2,'created_at'=>date('Y-m-d H:i:s', strtotime('-3 days'))],
+        ['id'=>3,'title'=>'Chauffeur disponible immédiatement','city'=>'Brazzaville','taxi_type'=>'Berline','availability'=>'Disponible immédiatement','is_urgent'=>1,'conditions'=>'Remplacement urgent, démarrage immédiat. Expérience taxi appréciée.','required_experience'=>'1 an min.','img_index'=>3,'created_at'=>date('Y-m-d H:i:s', strtotime('-2 hours'))],
+        ['id'=>4,'title'=>'Taxi partagé – Dolisie','city'=>'Dolisie','taxi_type'=>'Minibus','availability'=>'Temps partiel','is_urgent'=>0,'conditions'=>'Trajet Dolisie–Brazzaville, 3 jours/semaine. Véhicule fourni.','required_experience'=>'1 an min.','img_index'=>4,'created_at'=>date('Y-m-d H:i:s', strtotime('-7 days'))],
+        ['id'=>5,'title'=>'Chauffeur VTC premium – Brazzaville','city'=>'Brazzaville','taxi_type'=>'SUV','availability'=>'Temps plein','is_urgent'=>0,'conditions'=>'Clientèle entreprises, tenue professionnelle exigée. Bonus mensuel.','required_experience'=>'5 ans min.','img_index'=>5,'created_at'=>date('Y-m-d H:i:s', strtotime('-5 days'))],
+        ['id'=>6,'title'=>'Chauffeur taxi – Nkayi','city'=>'Nkayi','taxi_type'=>'Berline','availability'=>'Temps plein','is_urgent'=>0,'conditions'=>'Secteur Nkayi, bonne connaissance locale. Partage 55/45.','required_experience'=>'2 ans min.','img_index'=>1,'created_at'=>date('Y-m-d H:i:s', strtotime('-10 days'))],
     ];
     $total = count($offers);
 }
@@ -118,21 +118,63 @@ include __DIR__ . '/includes/header.php';
 }
 .hw-search-bar button:hover { background: #005FD6; }
 
-/* Filters */
+/* ── Filters redesign ── */
 .hw-filters-wrap {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 24px 24px 0;
+    padding: 28px 24px 0;
 }
+.hw-filters-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+.hw-filters-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    font-weight: 800;
+    color: #111;
+    white-space: nowrap;
+}
+.hw-filter-count {
+    font-size: 13px;
+    color: #6B7280;
+    font-family: 'Inter', sans-serif;
+    white-space: nowrap;
+    background: #F3F4F6;
+    padding: 4px 12px;
+    border-radius: 50px;
+}
+.hw-filter-reset {
+    font-size: 12px;
+    color: #DC2626;
+    text-decoration: none;
+    font-weight: 700;
+    white-space: nowrap;
+    padding: 4px 12px;
+    background: #FEF2F2;
+    border-radius: 50px;
+    transition: background 0.15s;
+}
+.hw-filter-reset:hover { background: #FEE2E2; }
+
+/* Pill selectors row */
 .hw-filters-bar {
     display: flex;
-    gap: 10px;
+    gap: 8px;
     flex-wrap: wrap;
     align-items: center;
-    margin-bottom: 16px;
+    margin-bottom: 20px;
 }
-.hw-filter-select {
-    height: 40px;
+.hw-filter-pill {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 38px;
     padding: 0 16px;
     border: 1.5px solid #E5E7EB;
     border-radius: 50px;
@@ -141,45 +183,55 @@ include __DIR__ . '/includes/header.php';
     color: #374151;
     background: #fff;
     cursor: pointer;
-    outline: none;
-    transition: border-color 0.2s;
-}
-.hw-filter-select:focus { border-color: #0070FF; }
-.hw-filter-reset {
-    font-size: 13px;
-    color: #0070FF;
-    text-decoration: none;
-    font-weight: 600;
     white-space: nowrap;
+    font-weight: 500;
+    transition: border-color 0.2s, background 0.2s, color 0.2s;
+    user-select: none;
 }
-.hw-filter-count {
-    margin-left: auto;
-    font-size: 13px;
-    color: #6B7280;
-    font-family: 'Inter', sans-serif;
-    white-space: nowrap;
+.hw-filter-pill:hover { border-color: #0070FF; color: #0070FF; background: #F0F6FF; }
+.hw-filter-pill.active { border-color: #0070FF; background: #0070FF; color: #fff; }
+.hw-filter-pill select {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    width: 100%;
+    cursor: pointer;
 }
+.hw-filter-pill svg { flex-shrink: 0; }
+
+/* Quick-filter pills */
 .hw-badge-filters {
     display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    margin-bottom: 28px;
+    gap: 6px;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    margin-bottom: 32px;
+    padding-bottom: 4px;
 }
+.hw-badge-filters::-webkit-scrollbar { display: none; }
 .hw-badge-pill {
-    display: inline-block;
-    padding: 6px 16px;
-    background: #EEF2FF;
-    color: #0070FF;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 7px 16px;
+    background: #F3F4F6;
+    color: #374151;
     border-radius: 50px;
-    font-size: 12px;
-    font-weight: 700;
-    font-family: 'Montserrat', sans-serif;
+    font-size: 12.5px;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
     text-decoration: none;
+    white-space: nowrap;
+    flex-shrink: 0;
     transition: background 0.15s, color 0.15s;
+    border: 1.5px solid transparent;
 }
-.hw-badge-pill:hover { background: #0070FF; color: #fff; }
+.hw-badge-pill:hover { background: #EEF2FF; color: #0070FF; border-color: #C7D7FF; }
 .hw-badge-pill.urgent { background: #FFF3F3; color: #DC2626; }
-.hw-badge-pill.urgent:hover { background: #DC2626; color: #fff; }
+.hw-badge-pill.urgent:hover { background: #DC2626; color: #fff; border-color: #DC2626; }
+.hw-badge-pill.active { background: #0070FF; color: #fff; border-color: #0070FF; }
 
 /* Cards grid */
 .hw-offers-section {
@@ -395,35 +447,65 @@ include __DIR__ . '/includes/header.php';
 
 <!-- Filters -->
 <div class="hw-filters-wrap">
-    <div class="hw-filters-bar">
-        <select class="hw-filter-select" onchange="applyFilter('ville', this.value)">
-            <option value="">📍 Toutes les villes</option>
-            <?php foreach(['Brazzaville','Pointe-Noire','Dolisie','Nkayi','Ouesso'] as $v): ?>
-            <option value="<?=$v?>" <?=$ville==$v?'selected':''?>><?=$v?></option>
-            <?php endforeach; ?>
-        </select>
-        <select class="hw-filter-select" onchange="applyFilter('disponibilite', this.value)">
-            <option value="">⏰ Toutes disponibilités</option>
-            <?php foreach(['Temps plein','Temps partiel','Disponible immédiatement'] as $d): ?>
-            <option value="<?=$d?>" <?=$dispo==$d?'selected':''?>><?=$d?></option>
-            <?php endforeach; ?>
-        </select>
-        <select class="hw-filter-select" onchange="applyFilter('urgence', this.value)">
-            <option value="">Toutes les offres</option>
-            <option value="1" <?=$urgence?'selected':''?>>🔥 Urgentes uniquement</option>
-        </select>
-        <?php if ($ville || $dispo || $urgence || $q): ?>
-        <a href="/offres" class="hw-filter-reset">✕ Réinitialiser</a>
-        <?php endif; ?>
-        <span class="hw-filter-count"><?= $total ?> offre<?= $total > 1 ? 's' : '' ?> trouvée<?= $total > 1 ? 's' : '' ?></span>
+
+    <div class="hw-filters-top">
+        <span class="hw-filters-title">Filtrer les offres</span>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+            <span class="hw-filter-count"><?= $total ?> offre<?= $total > 1 ? 's' : '' ?> trouvée<?= $total > 1 ? 's' : '' ?></span>
+            <?php if ($ville || $dispo || $urgence || $q): ?>
+            <a href="/offres" class="hw-filter-reset">✕ Réinitialiser les filtres</a>
+            <?php endif; ?>
+        </div>
     </div>
+
+    <div class="hw-filters-bar">
+        <!-- Ville -->
+        <label class="hw-filter-pill <?= $ville ? 'active' : '' ?>">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <?= $ville ?: 'Ville' ?>
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+            <select onchange="applyFilter('ville', this.value)">
+                <option value="">Toutes les villes</option>
+                <?php foreach(['Brazzaville','Pointe-Noire','Dolisie','Nkayi','Ouesso'] as $v): ?>
+                <option value="<?=$v?>" <?=$ville==$v?'selected':''?>><?=$v?></option>
+                <?php endforeach; ?>
+            </select>
+        </label>
+
+        <!-- Disponibilité -->
+        <label class="hw-filter-pill <?= $dispo ? 'active' : '' ?>">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <?= $dispo ?: 'Disponibilité' ?>
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+            <select onchange="applyFilter('disponibilite', this.value)">
+                <option value="">Toutes disponibilités</option>
+                <?php foreach(['Temps plein','Temps partiel','Disponible immédiatement'] as $d): ?>
+                <option value="<?=$d?>" <?=$dispo==$d?'selected':''?>><?=$d?></option>
+                <?php endforeach; ?>
+            </select>
+        </label>
+
+        <!-- Urgence -->
+        <label class="hw-filter-pill <?= $urgence ? 'active' : '' ?>" style="<?= $urgence ? 'background:#DC2626;border-color:#DC2626;' : '' ?>">
+            🔥 <?= $urgence ? 'Urgent' : 'Toutes les offres' ?>
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+            <select onchange="applyFilter('urgence', this.value)">
+                <option value="" <?=!$urgence?'selected':''?>>Toutes les offres</option>
+                <option value="1" <?=$urgence?'selected':''?>>Urgentes uniquement</option>
+            </select>
+        </label>
+    </div>
+
+    <!-- Quick pills -->
     <div class="hw-badge-filters">
-        <a href="/offres?urgence=1" class="hw-badge-pill urgent">🔥 Urgent</a>
-        <a href="/offres?disponibilite=Disponible+imm%C3%A9diatement" class="hw-badge-pill">⚡ Disponible immédiatement</a>
-        <a href="/offres?disponibilite=Temps+plein" class="hw-badge-pill">🕐 Temps plein</a>
-        <a href="/offres?disponibilite=Temps+partiel" class="hw-badge-pill">🕔 Temps partiel</a>
-        <a href="/offres?ville=Brazzaville" class="hw-badge-pill">📍 Brazzaville</a>
-        <a href="/offres?ville=Pointe-Noire" class="hw-badge-pill">📍 Pointe-Noire</a>
+        <a href="/offres?urgence=1" class="hw-badge-pill urgent <?= $urgence ? 'active' : '' ?>">🔥 Urgent</a>
+        <a href="/offres?disponibilite=Disponible+imm%C3%A9diatement" class="hw-badge-pill <?= $dispo==='Disponible immédiatement'?'active':'' ?>">⚡ Dispo immédiat</a>
+        <a href="/offres?disponibilite=Temps+plein" class="hw-badge-pill <?= $dispo==='Temps plein'?'active':'' ?>">🕐 Temps plein</a>
+        <a href="/offres?disponibilite=Temps+partiel" class="hw-badge-pill <?= $dispo==='Temps partiel'?'active':'' ?>">🕔 Temps partiel</a>
+        <a href="/offres?ville=Brazzaville" class="hw-badge-pill <?= $ville==='Brazzaville'?'active':'' ?>">📍 Brazzaville</a>
+        <a href="/offres?ville=Pointe-Noire" class="hw-badge-pill <?= $ville==='Pointe-Noire'?'active':'' ?>">📍 Pointe-Noire</a>
+        <a href="/offres?ville=Dolisie" class="hw-badge-pill <?= $ville==='Dolisie'?'active':'' ?>">📍 Dolisie</a>
+        <a href="/offres?ville=Nkayi" class="hw-badge-pill <?= $ville==='Nkayi'?'active':'' ?>">📍 Nkayi</a>
     </div>
 </div>
 
@@ -474,7 +556,17 @@ include __DIR__ . '/includes/header.php';
                 <?php endif; ?>
             </div>
             <div class="hw-ocard-footer">
-                <span class="hw-ocard-date">Publié récemment</span>
+                <span class="hw-ocard-date">
+                    <?php
+                    $ts = !empty($offer['created_at']) ? strtotime($offer['created_at']) : time();
+                    $diff = time() - $ts;
+                    if ($diff < 3600) echo 'Il y a ' . max(1, round($diff/60)) . ' min';
+                    elseif ($diff < 86400) echo 'Il y a ' . round($diff/3600) . 'h';
+                    elseif ($diff < 2*86400) echo 'Hier';
+                    elseif ($diff < 7*86400) echo 'Il y a ' . round($diff/86400) . ' jours';
+                    else echo date('d/m/Y', $ts);
+                    ?>
+                </span>
                 <a href="/chauffeurs?offre=<?= $offer['id'] ?>" class="hw-ocard-btn">Voir l'offre</a>
             </div>
         </div>
