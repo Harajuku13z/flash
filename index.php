@@ -2134,7 +2134,7 @@ include __DIR__ . '/includes/header.php';
     <div class="hw-cities-grid">
 
         <a href="/offres?ville=Brazzaville" class="hw-city-card big">
-            <img src="/assets/images/taxi-hero.png" alt="Brazzaville" class="hw-city-img"
+            <img src="/assets/images/city-brazzaville.jpg" alt="Brazzaville" class="hw-city-img"
                  onerror="this.style.display='none';this.parentElement.style.background='linear-gradient(135deg,#1e3a8a,#0070FF)'">
             <div class="hw-city-overlay"></div>
             <div class="hw-city-body">
@@ -2147,7 +2147,7 @@ include __DIR__ . '/includes/header.php';
         </a>
 
         <a href="/offres?ville=Pointe-Noire" class="hw-city-card small">
-            <img src="/assets/images/taxi-card-1.jpg" alt="Pointe-Noire" class="hw-city-img"
+            <img src="/assets/images/city-pointe-noire.jpg" alt="Pointe-Noire" class="hw-city-img"
                  onerror="this.style.display='none';this.parentElement.style.background='linear-gradient(135deg,#064E3B,#008A3D)'">
             <div class="hw-city-overlay"></div>
             <div class="hw-city-body">
@@ -2157,7 +2157,7 @@ include __DIR__ . '/includes/header.php';
         </a>
 
         <a href="/offres?ville=Dolisie" class="hw-city-card small">
-            <img src="/assets/images/taxi-card-2.jpg" alt="Dolisie" class="hw-city-img"
+            <img src="/assets/images/city-dolisie.jpg" alt="Dolisie" class="hw-city-img"
                  onerror="this.style.display='none';this.parentElement.style.background='linear-gradient(135deg,#78350F,#B45309)'">
             <div class="hw-city-overlay"></div>
             <div class="hw-city-body">
@@ -2167,7 +2167,7 @@ include __DIR__ . '/includes/header.php';
         </a>
 
         <a href="/offres?ville=Nkayi" class="hw-city-card small">
-            <img src="/assets/images/taxi-card-3.jpg" alt="Nkayi" class="hw-city-img"
+            <img src="/assets/images/city-nkayi.jpg" alt="Nkayi" class="hw-city-img"
                  onerror="this.style.display='none';this.parentElement.style.background='linear-gradient(135deg,#4C1D95,#7C3AED)'">
             <div class="hw-city-overlay"></div>
             <div class="hw-city-body">
