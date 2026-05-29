@@ -1294,67 +1294,59 @@ include __DIR__ . '/includes/header.php';
             <?php
             $ownerCards = [
                 [
-                    'emoji'  => '🚖',
-                    'bg'     => 'linear-gradient(135deg,#0d2d6b,#1e4db7)',
-                    'name'   => 'M. Moukassa – Brazzaville',
-                    'jobs'   => '3 offres actives',
-                    'photo_bg'=> '#EEF2FF',
-                    'photo_emoji'=> '🌆',
+                    'name'  => 'M. Moukassa – Brazzaville',
+                    'jobs'  => '3 offres actives',
+                    'img'   => '/assets/images/taxi-card-1.jpg',
+                    'ville' => 'Brazzaville',
                 ],
                 [
-                    'emoji'  => '🚕',
-                    'bg'     => 'linear-gradient(135deg,#064e3b,#008A3D)',
-                    'name'   => 'Mme Bouanga – Pointe-Noire',
-                    'jobs'   => '2 offres actives',
-                    'photo_bg'=> '#F0FDF4',
-                    'photo_emoji'=> '🌊',
+                    'name'  => 'Mme Bouanga – Pointe-Noire',
+                    'jobs'  => '2 offres actives',
+                    'img'   => '/assets/images/taxi-card-2.jpg',
+                    'ville' => 'Pointe-Noire',
                 ],
                 [
-                    'emoji'  => '🚗',
-                    'bg'     => 'linear-gradient(135deg,#7f1d1d,#c0392b)',
-                    'name'   => 'M. Nganga – Dolisie',
-                    'jobs'   => '1 offre active',
-                    'photo_bg'=> '#FFF7ED',
-                    'photo_emoji'=> '🌿',
+                    'name'  => 'M. Nganga – Dolisie',
+                    'jobs'  => '1 offre active',
+                    'img'   => '/assets/images/taxi-card-3.jpg',
+                    'ville' => 'Dolisie',
                 ],
                 [
-                    'emoji'  => '❄️',
-                    'bg'     => 'linear-gradient(135deg,#1e3a8a,#3b82f6)',
-                    'name'   => 'Taxi Élite – Brazzaville',
-                    'jobs'   => '4 offres actives',
-                    'photo_bg'=> '#EFF6FF',
-                    'photo_emoji'=> '🏙️',
+                    'name'  => 'Taxi Élite – Brazzaville',
+                    'jobs'  => '4 offres actives',
+                    'img'   => '/assets/images/taxi-card-4.jpg',
+                    'ville' => 'Brazzaville',
                 ],
                 [
-                    'emoji'  => '⚡',
-                    'bg'     => 'linear-gradient(135deg,#713f12,#d97706)',
-                    'name'   => 'Rapid Auto – Nkayi',
-                    'jobs'   => '2 offres actives',
-                    'photo_bg'=> '#FEFCE8',
-                    'photo_emoji'=> '🏘️',
+                    'name'  => 'Rapid Auto – Nkayi',
+                    'jobs'  => '2 offres actives',
+                    'img'   => '/assets/images/taxi-card-1.jpg',
+                    'ville' => 'Nkayi',
                 ],
                 [
-                    'emoji'  => '🌟',
-                    'bg'     => 'linear-gradient(135deg,#4c1d95,#7c3aed)',
-                    'name'   => 'Congo Taxi Pro – PNR',
-                    'jobs'   => '5 offres actives',
-                    'photo_bg'=> '#FDF4FF',
-                    'photo_emoji'=> '🌴',
+                    'name'  => 'Congo Taxi Pro – PNR',
+                    'jobs'  => '5 offres actives',
+                    'img'   => '/assets/images/taxi-card-2.jpg',
+                    'ville' => 'Pointe-Noire',
                 ],
             ];
             foreach (array_slice($ownerCards, 0, 3) as $o): ?>
-            <a href="/offres?proprietaire=<?= urlencode($o['name']) ?>" class="hw-owner-card">
-                <!-- Photo du propriétaire -->
-                <div class="hw-owner-photo-placeholder" style="background:<?= $o['photo_bg'] ?>;">
-                    <span style="font-size:80px;opacity:0.35;"><?= $o['photo_emoji'] ?></span>
-                    <!-- Logo badge overlay -->
-                    <div style="position:absolute;bottom:12px;left:12px;
-                        background:<?= $o['bg'] ?>;color:#fff;
-                        border-radius:10px;padding:6px 12px;
-                        font-size:13px;font-weight:700;
-                        font-family:'Montserrat',sans-serif;
-                        display:flex;align-items:center;gap:6px;">
-                        <?= $o['emoji'] ?>
+            <a href="/offres?ville=<?= urlencode($o['ville']) ?>" class="hw-owner-card">
+                <!-- Photo taxi pleine largeur -->
+                <div style="
+                    width:100%; height:210px; overflow:hidden;
+                    background: linear-gradient(135deg,#e8f5e9,#c8e6c9);
+                    position:relative;
+                ">
+                    <img src="<?= $o['img'] ?>"
+                         alt="Taxi <?= htmlspecialchars($o['ville']) ?>"
+                         style="width:100%;height:100%;object-fit:cover;object-position:center;"
+                         onerror="this.parentElement.style.background='linear-gradient(135deg,#1a4a2e,#008A3D)';this.style.display='none';">
+                    <!-- Gradient overlay bas -->
+                    <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.25) 0%,transparent 50%);"></div>
+                    <!-- Badge ville -->
+                    <div style="position:absolute;top:12px;left:12px;background:rgba(0,0,0,0.55);backdrop-filter:blur(4px);color:#fff;border-radius:50px;padding:4px 12px;font-size:12px;font-weight:700;font-family:'Montserrat',sans-serif;">
+                        📍 <?= htmlspecialchars($o['ville']) ?>
                     </div>
                 </div>
                 <div class="hw-owner-info">
@@ -1362,7 +1354,7 @@ include __DIR__ . '/includes/header.php';
                         <div class="hw-owner-name"><?= htmlspecialchars($o['name']) ?></div>
                         <div class="hw-owner-count"><?= $o['jobs'] ?></div>
                     </div>
-                    <div class="hw-owner-arrow">
+                    <div class="hw-owner-arrow" style="background:#111;">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                     </div>
                 </div>
@@ -1856,17 +1848,18 @@ include __DIR__ . '/includes/header.php';
         var start = page * perPage;
         var slice = cards.slice(start, start + perPage);
         carousel.innerHTML = slice.map(function(o) {
-            return '<a href="/offres" class="hw-owner-card">' +
-                '<div class="hw-owner-photo-placeholder" style="background:' + o.photo_bg + ';position:relative;">' +
-                    '<span style="font-size:80px;opacity:0.35;">' + o.photo_emoji + '</span>' +
-                    '<div style="position:absolute;bottom:12px;left:12px;background:' + o.bg + ';color:#fff;border-radius:10px;padding:6px 12px;font-size:13px;font-weight:700;font-family:Montserrat,sans-serif;display:flex;align-items:center;gap:6px;">' + o.emoji + '</div>' +
+            return '<a href="/offres?ville=' + encodeURIComponent(o.ville) + '" class="hw-owner-card">' +
+                '<div style="width:100%;height:210px;overflow:hidden;background:linear-gradient(135deg,#1a4a2e,#008A3D);position:relative;">' +
+                    '<img src="' + o.img + '" alt="Taxi ' + o.ville + '" style="width:100%;height:100%;object-fit:cover;object-position:center;" onerror="this.style.display=\'none\'">' +
+                    '<div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.25) 0%,transparent 50%);"></div>' +
+                    '<div style="position:absolute;top:12px;left:12px;background:rgba(0,0,0,0.55);backdrop-filter:blur(4px);color:#fff;border-radius:50px;padding:4px 12px;font-size:12px;font-weight:700;font-family:Montserrat,sans-serif;">📍 ' + o.ville + '</div>' +
                 '</div>' +
                 '<div class="hw-owner-info">' +
                     '<div class="hw-owner-info-left">' +
                         '<div class="hw-owner-name">' + o.name + '</div>' +
                         '<div class="hw-owner-count">' + o.jobs + '</div>' +
                     '</div>' +
-                    '<div class="hw-owner-arrow">' +
+                    '<div class="hw-owner-arrow" style="background:#111;">' +
                         '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>' +
                     '</div>' +
                 '</div>' +
